@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tftpoelinkserver-service
+  namespace: james
+spec:
+  ports:
+    - protocol: TCP
+      port: 4050
+  selector:
+    app: tftpoelinkserver

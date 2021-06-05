@@ -1,0 +1,36 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: tftpoelinkserver-ingress
+  namespace: james
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    ingress.kubernetes.io/ssl-host: www.theforbiddentrove.xyz
+    ingress.kubernetes.io/ssl-redirect: 'true'
+    ingress.kubernetes.io/ssl-temporary-redirect: 'true'
+    kubernetes.io/ingress.allow-http: 'false'
+    traefik.ingress.kubernetes.io/redirect-regex: '^https://theforbiddentrove\.xyz/(.*)'
+    traefik.ingress.kubernetes.io/redirect-replacement: 'https://www.theforbiddentrove.xyz/$1'
+spec:
+  tls:
+    - hosts:
+        - theforbiddentrove.xyz
+        - www.theforbiddentrove.xyz
+      secretName: website-tls-strzg
+  rules:
+    - host: theforbiddentrove.xyz
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              serviceName: tftpoelinkserver-service
+              servicePort: 4050
+    - host: www.theforbiddentrove.xyz
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              serviceName: tftpoelinkserver-service
+              servicePort: 4050

@@ -1,0 +1,33 @@
+{
+  "name": "tft_app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.1",
+    "uuid": "^8.3.2"
+  },
+  "scripts": {
+    "startserver:dev": "NODE_ENV=dev node accountLinkServer.js",
+    "startserver:prod": "NODE_ENV=prod node accountLinkServer.js",
+    "startbot:dev": "NODE_ENV=dev node bot.js",
+    "startbot:prod": "NODE_ENV=prod node bot.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@types/jest": "^26.0.23",
+    "@types/mysql": "^2.15.18",
+    "@types/node": "^15.12.1",
+    "@types/node-fetch": "^2.5.10",
+    "@types/uuid": "^8.3.0",
+    "jest": "^27.0.4",
+    "msw": "^0.29.0"
+  }
+}

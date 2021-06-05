@@ -1,0 +1,8 @@
+FROM node:12.18.1
+RUN mkdir /tftpoelinkserver
+WORKDIR /tftpoelinkserver
+COPY package.json yarn.lock .
+RUN yarn
+COPY . .
+CMD ["yarn", "startserver:prod"]
+

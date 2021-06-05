@@ -1,0 +1,62 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: tftpoelinkbot-deployment
+  namespace: james
+  labels:
+    app: tftpoelinkbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tftpoelinkbot
+  template:
+    metadata:
+      labels:
+        app: tftpoelinkbot
+    spec:
+      containers:
+        - name: tftpoelinkbot
+          image: 'harbor.teamfrag.net/private/tftpoelinkbot/tftpoelinkbot:latest'
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 8082
+              protocol: TCP
+          env:
+            - name: botControlId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: botControlId
+            - name: chkDiscCmd
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: chkDiscCmd
+            - name: chkpoecmd
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: chkpoecmd
+            - name: clientId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: clientId
+            - name: botToken
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: botToken
+            - name: dbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: dbPassword
+            - name: dbHost
+              value: mysql-internal-service
+            - name: dbUser
+              value: tft
+            - name: dbName
+              value: tft

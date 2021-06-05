@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: tftpoelinkserver-deployment
+  namespace: james
+  labels:
+    app: tftpoelinkserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tftpoelinkserver
+  template:
+    metadata:
+      labels:
+        app: tftpoelinkserver
+    spec:
+      containers:
+        - name: tftpoelinkserver
+          image: 'harbor.teamfrag.net/private/tftpoelinkserver/tftpoelinkserver:latest'
+          ports:
+            - containerPort: 4050
+              protocol: TCP
+          env:
+            - name: dbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: dbPassword
+            - name: dbHost
+              value: mysql-internal-service
+            - name: dbUser
+              value: tft
+            - name: dbName
+              value: tft
+            - name: clientId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: clientId
+            - name: clientSecret
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: clientSecret
