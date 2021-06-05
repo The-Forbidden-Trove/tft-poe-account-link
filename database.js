@@ -37,7 +37,8 @@ const updateUnassignedLinkedUser = async (discord_id) => {
 const getPoeTftStateLinkByDiscordId = async (discordId) => {
   const conn = await createConnection();
   const [rows] = await conn.execute(
-    `SELECT poe_account_name FROM ${LINK_TABLE} WHERE discord_id = "${discordId}"`
+    `SELECT poe_account_name FROM ${LINK_TABLE} WHERE discord_id = ?`,
+    [discordId]
   );
 
   if (rows.length > 0) {
@@ -54,7 +55,8 @@ const getPoeTftStateLinkByDiscordId = async (discordId) => {
 const getPoeTftStateLinkByPoeAccount = async (poeAccountName) => {
   const conn = await createConnection();
   const [rows] = await conn.execute(
-    `SELECT discord_id FROM ${LINK_TABLE} WHERE poe_account_name = "${poeAccountName}"`
+    `SELECT discord_id FROM ${LINK_TABLE} WHERE poe_account_name = ?`,
+    [poeAccountName]
   );
 
   if (rows.length > 0) {

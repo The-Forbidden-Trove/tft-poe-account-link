@@ -37,6 +37,11 @@ client.on('message', async (message) => {
     const lowerCaseContent = message.content.toLowerCase();
     if (lowerCaseContent.startsWith('#')) {
       const splitContent = lowerCaseContent.split(' ');
+
+      if (splitContent[1].includes(' ') || splitContent[1].includes(';') || splitContent[1].includes('-')) {
+        return
+      }
+
       if (lowerCaseContent.includes(process.env.chkDiscCmd)) {
         if (isNaN(splitContent[1])) {
           await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
