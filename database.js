@@ -41,15 +41,17 @@ const getPoeTftStateLinkByDiscordId = async (discordId) => {
     [discordId]
   );
 
+  let retVal = false
+
   if (rows.length > 0) {
     if (rows.length === 1) {
-      return rows[0]['poe_account_name'];
+      retVal = rows[0]['poe_account_name'];
     } else {
       console.log(`User somehow has more than two entries in ${LINK_TABLE} for discord id ${discordId}`);
-      return false;
     }
   }
-  return false;
+  await conn.end();
+  return retVal;
 }
 
 const getPoeTftStateLinkByPoeAccount = async (poeAccountName) => {
@@ -59,15 +61,17 @@ const getPoeTftStateLinkByPoeAccount = async (poeAccountName) => {
     [poeAccountName]
   );
 
+  let retVal = false;
+
   if (rows.length > 0) {
     if (rows.length === 1) {
-      return String(rows[0]['discord_id']);
+      retVal = String(rows[0]['discord_id']);
     } else {
       console.log(`User somehow has more than two entries in ${LINK_TABLE} for poeAccountName ${poeAccountName}`);
-      return false;
     }
   }
-  return false;
+  await conn.end();
+  return retVal;
 }
 
 const createStateDiscordIdLink = async (state, discordId) => {
