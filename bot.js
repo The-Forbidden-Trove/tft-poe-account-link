@@ -38,7 +38,7 @@ client.on('message', async (message) => {
     if (lowerCaseContent.startsWith('#')) {
       const splitContent = lowerCaseContent.split(' ');
 
-      if (splitContent[1].includes(' ') || splitContent[1].includes(';') || splitContent[1].includes('-')) {
+      if (splitContent[1].includes(' ') || splitContent[1].includes(';') || splitContent[1].includes('-') || splitContent[1].includes('\'') || splitContent[1].includes('"')) {
         return
       }
 
