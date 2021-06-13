@@ -7,7 +7,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
     if (jsonResp['access_token'] > "") {
         const MAX_RETRIES = 3;
         let curRetries = 0;
-        let success = await callProfileApi(jsonResp['access_token'], pendingResponse, discordId);
+        let success = await callProfileApi(jsonResp['access_token'], pendingResponse, discordId, blacklist);
         while (curRetries < MAX_RETRIES) {
             if (!success) {
                 curRetries++;
@@ -42,7 +42,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         }
         const poeAccName = profileRespJson.name;
 
-        if (blacklist.indexOf(poeAccName) > -1) {
+        if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
             await addBlacklistedUserAttempt(discordId, poeAccName);
             pendingResponse.send('Success!  Your POE and Discord account are now linked.');
             return true;

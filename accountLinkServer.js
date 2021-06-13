@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 const app = express();
 const port = 4050;
 
-const blacklist = getBlacklistedAccountNames();
+let blacklist;
 
 console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 
@@ -60,6 +60,13 @@ app.get('/oauth_redirect', async (req, res) => {
     if (tokenResp.status === 429) {
       enableTemporaryTimeout(tokenResp.headers.raw()['Retry-After'])
     }
+
+    if (blacklist === undefined) {
+      blacklist = await getBlacklistedAccountNames();
+    }
+
+    console.log(`blacklist: ${blacklist}`)
+
     await callProfileApiWithRetryBackoff(tokenResp, res, discordId, blacklist);
   }, (rejectTokenReason) => {
     console.log(`rejectTokenReason: ${JSON.stringify(rejectTokenReason)}`)

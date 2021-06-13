@@ -24,6 +24,11 @@ spec:
             - containerPort: 8082
               protocol: TCP
           env:
+            - name: modAlertChannelId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: modAlertChannelId
             - name: botControlId
               valueFrom:
                 secretKeyRef:
