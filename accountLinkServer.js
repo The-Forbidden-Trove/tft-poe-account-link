@@ -77,6 +77,10 @@ app.listen(port, () => {
   console.log(`TFT poe link app listening at http://localhost:${port}`);
 });
 
+setInterval(() => {
+  blacklist = await getBlacklistedAccountNames();
+}, 60000);
+
 module.exports = {
   callProfileApiWithRetryBackoff,
 }
