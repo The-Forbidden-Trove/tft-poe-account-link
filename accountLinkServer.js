@@ -3,6 +3,7 @@ const nodeFetch = require('node-fetch');
 const dotenv = require('dotenv');
 const { getDiscordIdStateLink } = require('./database');
 const { callProfileApiWithRetryBackoff } = require('./oauthCalls');
+const { getBlacklistedAccountNames } = require('./blacklist');
 
 if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
   dotenv.config({ path: __dirname + '/.env_dev' });
@@ -10,6 +11,8 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 
 const app = express();
 const port = 4050;
+
+const blacklist = getBlacklistedAccountNames();
 
 console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 
@@ -57,7 +60,7 @@ app.get('/oauth_redirect', async (req, res) => {
     if (tokenResp.status === 429) {
       enableTemporaryTimeout(tokenResp.headers.raw()['Retry-After'])
     }
-    await callProfileApiWithRetryBackoff(tokenResp, res, discordId);
+    await callProfileApiWithRetryBackoff(tokenResp, res, discordId, blacklist);
   }, (rejectTokenReason) => {
     console.log(`rejectTokenReason: ${JSON.stringify(rejectTokenReason)}`)
   })

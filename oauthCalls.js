@@ -1,7 +1,7 @@
 const nodeFetch = require('node-fetch');
-const { linkTftPoeAccounts } = require('./database');
+const { linkTftPoeAccounts, addBlacklistedUserAttempt } = require('./database');
 
-const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discordId) => {
+const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discordId, blacklist) => {
     const jsonResp = await tokenResp.json();
     // console.log(`jsonResp: ${JSON.stringify(jsonResp)}`);
     if (jsonResp['access_token'] > "") {
@@ -12,7 +12,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
             if (!success) {
                 curRetries++;
                 await new Promise(resolve => setTimeout(resolve, curRetries * 1000));
-                success = await callProfileApi(jsonResp['access_token'], pendingResponse, discordId);
+                success = await callProfileApi(jsonResp['access_token'], pendingResponse, discordId, blacklist);
             } else {
                 break;
             }
@@ -25,7 +25,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
     return false;
 }
 
-const callProfileApi = async (accessToken, pendingResponse, discordId) => {
+const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist) => {
     const resp = await nodeFetch('https://www.pathofexile.com/api/profile', {
         headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -41,6 +41,12 @@ const callProfileApi = async (accessToken, pendingResponse, discordId) => {
             return false;
         }
         const poeAccName = profileRespJson.name;
+
+        if (blacklist.indexOf(poeAccName) > -1) {
+            await addBlacklistedUserAttempt(discordId, poeAccName);
+            pendingResponse.send('Success!  Your POE and Discord account are now linked.');
+            return true;
+        }
 
         await linkTftPoeAccounts(discordId, poeAccName);
         pendingResponse.send('Success! Your POE and Discord account are now linked.');

@@ -2,6 +2,7 @@ const mysql2 = require('mysql2');
 
 const LINK_TABLE = 'tft_poe_account_links';
 const STATE_DISCORD_ID_TABLE = 'state_discord_id_temp_link';
+const BLACKLISTED_USER_ATTEMPT_TABLE = 'blacklisted_user_link_attempts';
 
 const pool = mysql2.createPool({
   host: process.env.dbHost,
@@ -15,6 +16,29 @@ const pool = mysql2.createPool({
 
 const getConnection = async () => {
   return pool.promise();
+}
+
+const addBlacklistedUserAttempt = async (discordId, poeAccountName) => {
+  const connection = await getConnection();
+  await connection.execute(`INSERT INTO ${BLACKLISTED_USER_ATTEMPT_TABLE} (discord_id, poe_account_name) VALUES ("${discordId}", "${poeAccountName}")`);
+};
+
+const getBlacklistedUserAttempts = async () => {
+  const conn = await getConnection();
+  const [rows] = await conn.execute(
+    `SELECT id, discord_id, poe_account_name FROM ${BLACKLISTED_USER_ATTEMPT_TABLE}`
+  );
+
+  const ids = rows.map((row) => row['id']);
+
+  const attempts = rows.map((row) => ({
+    discordId: row['discord_id'],
+    poeAcc: row['poe_account_name']
+  }));
+
+  await conn.execute(`DELETE FROM ${BLACKLISTED_USER_ATTEMPT_TABLE} WHERE id IN (${ids.join(',')})`);
+
+  return attempts;
 }
 
 const getAllUnassignedLinkedUserIds = async () => {
@@ -111,4 +135,6 @@ module.exports = {
   getPoeTftStateLinkByPoeAccount,
   getAllUnassignedLinkedUserIds,
   updateUnassignedLinkedUser,
+  addBlacklistedUserAttempt,
+  getBlacklistedUserAttempts,
 }

@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const { v4 } = require('uuid');
-const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser } = require('./database');
+const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts } = require('./database');
 const dotenv = require('dotenv');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
+const MOD_ALERT_CHANNEL_ID = process.env.modAlertChannelId;
 
 if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
   dotenv.config({ path: __dirname + '/.env_dev' });
@@ -74,6 +75,15 @@ setInterval(async () => {
   const discordIds = await getAllUnassignedLinkedUserIds();
   await Promise.all(discordIds.map((id) => assignRoleThenUpdateUser(id)));
 }, 30000);
+
+setInterval(async () => {
+  const blacklistLinkAttempts = await getBlacklistedUserAttempts();
+  const modAlertChannel = await client.channels.fetch(MOD_ALERT_CHANNEL_ID, true);
+  blacklistLinkAttempts.forEach(async (attempt) => {
+    const { discordId, poeAcc } = attempt;
+    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} and poe account ${poeAcc} attempted to link their account!`)
+  })
+}, 60000);
 
 const assignRoleThenUpdateUser = async (discordId) => {
   return assignTftVerifiedRole(discordId).then(async () => await updateUnassignedLinkedUser(discordId));
