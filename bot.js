@@ -70,6 +70,7 @@ client.on('message', async (message) => {
 });
 
 client.login(process.env.botToken);
+client.user.setActivity('Message \'link\' to verify')
 
 setInterval(async () => {
   const discordIds = await getAllUnassignedLinkedUserIds();
