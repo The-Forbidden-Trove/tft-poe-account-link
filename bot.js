@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  client.user.setActivity('Message \'link\' to verify')
 });
 
 client.on('message', async (message) => {
@@ -70,7 +71,6 @@ client.on('message', async (message) => {
 });
 
 client.login(process.env.botToken);
-client.user.setActivity('Message \'link\' to verify')
 
 setInterval(async () => {
   const discordIds = await getAllUnassignedLinkedUserIds();
