@@ -36,7 +36,9 @@ const getBlacklistedUserAttempts = async () => {
     poeAcc: row['poe_account_name']
   }));
 
-  await conn.execute(`DELETE FROM ${BLACKLISTED_USER_ATTEMPT_TABLE} WHERE id IN (${ids.join(',')})`);
+  if (ids.length > 0) {
+    await conn.execute(`DELETE FROM ${BLACKLISTED_USER_ATTEMPT_TABLE} WHERE id IN (${ids.join(',')})`);
+  }
 
   return attempts;
 }
