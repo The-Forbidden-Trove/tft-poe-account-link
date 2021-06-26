@@ -77,7 +77,7 @@ app.listen(port, () => {
   console.log(`TFT poe link app listening at http://localhost:${port}`);
 });
 
-setInterval(() => {
+setInterval(async () => {
   blacklist = await getBlacklistedAccountNames();
 }, 60000);
 
