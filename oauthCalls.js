@@ -42,8 +42,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         }
         const poeAccName = profileRespJson.name;
 
-        console.log(`poeAccName: ${poeAccName}`)
-        if (blacklist.indexOf('shaaakil') > -1) {
+        if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
             await addBlacklistedUserAttempt(discordId, poeAccName);
             pendingResponse.send('Success!  Your POE and Discord account are now linked.');
             console.log(`blacklisted user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
