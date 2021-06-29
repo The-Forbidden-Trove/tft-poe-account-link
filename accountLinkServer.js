@@ -65,8 +65,6 @@ app.get('/oauth_redirect', async (req, res) => {
       blacklist = await getBlacklistedAccountNames();
     }
 
-    console.log(`blacklist: ${blacklist}`)
-
     await callProfileApiWithRetryBackoff(tokenResp, res, discordId, blacklist);
   }, (rejectTokenReason) => {
     console.log(`rejectTokenReason: ${JSON.stringify(rejectTokenReason)}`)
