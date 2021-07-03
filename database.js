@@ -122,7 +122,11 @@ const getDiscordIdStateLink = async (state) => {
 
 
 const linkTftPoeAccounts = async (discordId, poeAccountName) => {
-  // console.log(`linking accounts discord: ${discordId} and poe acc: ${poeAccountName}`)
+  const isLinked = await getPoeTftStateLinkByDiscordId(discordId);
+  if (isLinked) {
+    return;
+  }
+
   const connection = await getConnection();
   await connection.execute(
     `INSERT INTO ${LINK_TABLE} (poe_account_name, discord_id, datetime_linked) VALUES ("${poeAccountName}", "${discordId}", NOW())`
