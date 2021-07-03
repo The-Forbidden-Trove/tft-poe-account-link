@@ -52,6 +52,7 @@ client.on('message', async (message) => {
         const poeAccount = await getPoeTftStateLinkByDiscordId(splitContent[1]);
         if (poeAccount !== false && poeAccount > "") {
           await message.channel.send(`The POE account linked to discord id ${splitContent[1]} is ${poeAccount}`);
+          await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}`)
           return
         }
         await message.channel.send(`No POE account found for discord id ${splitContent[1]}`);
@@ -61,6 +62,7 @@ client.on('message', async (message) => {
         const discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1]);
         if (discordId !== false && discordId > "") {
           await message.channel.send(`The discord id linked to the POE account ${splitContent[1]} is ${discordId}`);
+          await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(splitContent[1])}`)
           return;
         }
         await message.channel.send(`No discord id found for POE account ${splitContent[1]}`);
