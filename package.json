@@ -19,7 +19,8 @@
     "startserver:prod": "NODE_ENV=prod node accountLinkServer.js",
     "startbot:dev": "NODE_ENV=dev node bot.js",
     "startbot:prod": "NODE_ENV=prod node bot.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@types/express": "^4.17.12",
@@ -28,6 +29,8 @@
     "@types/node": "^15.12.1",
     "@types/node-fetch": "^2.5.10",
     "@types/uuid": "^8.3.0",
+    "eslint": "^7.30.0",
+    "eslint-plugin-jest": "^24.3.6",
     "jest": "^27.0.4",
     "msw": "^0.29.0"
   }

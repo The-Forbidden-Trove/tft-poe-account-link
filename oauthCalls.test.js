@@ -1,7 +1,6 @@
 const { callProfileApiWithRetryBackoff } = require('./oauthCalls');
 const { server } = require('./_testSetup_/msw/server');
 const { rest } = require('msw');
-const database = require('./database');
 
 jest.mock('./database');
 

@@ -16,7 +16,7 @@ let blacklist;
 
 console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 
-const API_TIMEOUT_ENABLED = false;
+let API_TIMEOUT_ENABLED = false;
 
 const enableTemporaryTimeout = (retryAfter) => {
   API_TIMEOUT_ENABLED = true;
