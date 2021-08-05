@@ -1,5 +1,10 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const client = new Discord.Client({
+  presence: {
+    activityName: 'Message \'link\' to verify',
+    activityType: 'PLAYING'
+  }
+});
 const { v4 } = require('uuid');
 const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts } = require('./database');
 const dotenv = require('dotenv');
@@ -15,7 +20,6 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity('Message \'link\' to verify')
 });
 
 client.on('message', async (message) => {
