@@ -103,6 +103,8 @@ const unlinkDiscordID = async (discordId) => {
   const [rows] = await conn.execute(
     `DELETE FROM ${LINK_TABLE} WHERE discord_id = ${discordId}`
   );
+  let retVal = true;
+  return retVal;
 }
 
 
