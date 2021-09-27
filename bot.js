@@ -57,7 +57,7 @@ client.on('message', async (message) => {
           await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
           return;
         }
-        unlinkDiscordID(splitContent[1]);
+        const unlink = await unlinkDiscordID(splitContent[1]);
         await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
         return;
       }
