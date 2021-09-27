@@ -99,6 +99,7 @@ const getPoeTftStateLinkByPoeAccount = async (poeAccountName) => {
 
 //unlink command
 const unlinkDiscordID = async (discordId) => {
+  console.log(`connecting to DB to remove link for user with ID ${discordId}`);
   const conn = await getConnection();
   const [rows] = await conn.execute(
     `DELETE FROM ${LINK_TABLE} WHERE discord_id = ${discordId}`

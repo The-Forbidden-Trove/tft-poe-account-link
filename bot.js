@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
   presence: {
-    activityName: 'Message \'link\' to verify',
+    activityName: 'Message \'LINK\' to verify',
     activityType: 'PLAYING'
   }
 });
@@ -51,8 +51,8 @@ client.on('message', async (message) => {
         return
       }
       //unlink command
-      if (lowerCaseContent.includes("unlink")) {
-        console.log("unlink initiated")
+      if (lowerCaseContent.includes('unlink')) {
+        console.log(`unlink initiated`)
         if (isNaN(splitContent[1])) {
           await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
           return;
