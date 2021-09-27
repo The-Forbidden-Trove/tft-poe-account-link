@@ -50,6 +50,16 @@ client.on('message', async (message) => {
       if (splitContent[1].includes(' ') || splitContent[1].includes(';') || splitContent[1].includes('-') || splitContent[1].includes('\'') || splitContent[1].includes('"')) {
         return
       }
+      //unlink command
+      if (lowerCaseContent.includes("#unlink") && message.member.roles.has("TFT Community Managers")) {
+        if (isNaN(splitContent[1])) {
+          await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
+          return;
+        }
+        getPoeTftStateLinkByDiscordId(splitContent[1]);
+        await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
+        return;
+      }
 
       if (lowerCaseContent.includes(process.env.chkDiscCmd)) {
         if (isNaN(splitContent[1])) {

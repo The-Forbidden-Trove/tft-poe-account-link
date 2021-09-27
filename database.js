@@ -97,6 +97,16 @@ const getPoeTftStateLinkByPoeAccount = async (poeAccountName) => {
   return retVal;
 }
 
+//unlink command
+const unlinkDiscordID = async (discordId) => {
+  const conn = await getConnection();
+  const [rows] = await conn.execute(
+    `DELETE FROM ${LINK_TABLE} WHERE discord_id = ?`,
+    [discordId]
+  );
+}
+
+
 const createStateDiscordIdLink = async (state, discordId) => {
   const connection = await getConnection();
   await connection.execute(`INSERT INTO ${STATE_DISCORD_ID_TABLE} (state, discord_id) VALUES ("${state}", "${discordId}")`);
@@ -143,4 +153,5 @@ module.exports = {
   updateUnassignedLinkedUser,
   addBlacklistedUserAttempt,
   getBlacklistedUserAttempts,
+  unlinkDiscordID,
 }
