@@ -52,6 +52,7 @@ client.on('message', async (message) => {
       }
       //unlink command
       if (lowerCaseContent.includes("unlink")) {
+        console.log("unlink initiated")
         if (isNaN(splitContent[1])) {
           await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
           return;
