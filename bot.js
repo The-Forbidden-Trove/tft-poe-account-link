@@ -6,7 +6,7 @@ const client = new Discord.Client({
   }
 });
 const { v4 } = require('uuid');
-const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts } = require('./database');
+const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts, unlinkDiscordID } = require('./database');
 const dotenv = require('dotenv');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
@@ -58,6 +58,7 @@ client.on('message', async (message) => {
           return;
         }
         const unlink = await unlinkDiscordID(splitContent[1]);
+        console.log(unlink);
         await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
         return;
       }
