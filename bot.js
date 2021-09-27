@@ -51,12 +51,12 @@ client.on('message', async (message) => {
         return
       }
       //unlink command
-      if (lowerCaseContent.includes("#unlink")) {
+      if (lowerCaseContent.includes("unlink")) {
         if (isNaN(splitContent[1])) {
           await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
           return;
         }
-        getPoeTftStateLinkByDiscordId(splitContent[1]);
+        unlinkDiscordID(splitContent[1]);
         await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
         return;
       }
