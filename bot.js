@@ -28,18 +28,16 @@ client.on('ready', () => {
 client.on('message', async (message) => {
   // is private message
   if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
-    if (message.content.toLowerCase().includes('link')) {
-      const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
-      if (isLinked) {
-        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker!');
-        return;
-      }
-      const generatedState = v4();
-      await createStateDiscordIdLink(generatedState, message.author.id);
-      await message.author.dmChannel.send(
-        `Click here to authorize with the GGG oauth servers: ${buildAuthorizeURL(generatedState)}`
-      );
+    const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
+    if (isLinked) {
+      await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker!');
+      return;
     }
+    const generatedState = v4();
+    await createStateDiscordIdLink(generatedState, message.author.id);
+    await message.author.dmChannel.send(
+      `Click here to authorize with the GGG oauth servers: ${buildAuthorizeURL(generatedState)}`
+    );
   }
 
   if (message.channel.id === BOT_CONTROL_CHANNEL_ID) {
@@ -63,7 +61,7 @@ client.on('message', async (message) => {
         return;
       }
 
-      if (lowerCaseContent.includes(process.env.chkDiscCmd)) {
+      if (lowerCaseContent.includes(process.env.chkDiscCmd) || lowerCaseContent.includes('cdl')) {
         if (isNaN(splitContent[1])) {
           await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
           return;
@@ -77,7 +75,7 @@ client.on('message', async (message) => {
         await message.channel.send(`No POE account found for discord id ${splitContent[1]}`);
         return;
       }
-      if (lowerCaseContent.includes(process.env.chkpoecmd)) {
+      if (lowerCaseContent.includes(process.env.chkpoecmd) || lowerCaseContent.includes('cpl')) {
         const discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1]);
         if (discordId !== false && discordId > "") {
           await message.channel.send(`The discord id linked to the POE account ${splitContent[1]} is ${discordId}`);
