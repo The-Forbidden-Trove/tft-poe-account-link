@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: Checkout
+        name: SeNdee08
         uses: actions/checkout@v2
       -
-        name: Set up QEMU
+        name: SeNdee08
         uses: docker/setup-qemu-action@v1
       - 
         uses: actions/setup-node@v1
