@@ -118,6 +118,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
   } catch (e) {
     console.log(e.stack);
     console.log(e.message);
+    return Promise.reject(new Error('user does not exist'));
   }
   if (guildMember) {
     await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
