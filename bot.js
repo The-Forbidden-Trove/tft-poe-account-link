@@ -115,7 +115,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
   let guildMember;
   try {
     guildMember = await guild.members.fetch({ user: String(discordUserId), cache: false });
-  } catch (Exception e) {
+  } catch (e) {
     console.log(e.stack);
     console.log(e.message);
   }
