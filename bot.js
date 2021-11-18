@@ -111,8 +111,17 @@ const assignRoleThenUpdateUser = async (discordId) => {
 
 const assignTftVerifiedRole = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
-  const guildMember = await guild.members.fetch({ user: String(discordUserId), cache: false });
-  await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
+  console.log(`assignTftVerifiedRole to:  ${discordUserId}`);
+  let guildMember;
+  try {
+    guildMember = await guild.members.fetch({ user: String(discordUserId), cache: false });
+  } catch (Exception e) {
+    console.log(e.stack);
+    console.log(e.message);
+  }
+  if (guildMember) {
+    await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
+  }
 }
 
 const buildAuthorizeURL = (state) => {
