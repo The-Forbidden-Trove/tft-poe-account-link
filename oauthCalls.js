@@ -18,7 +18,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
             }
         }
         if (!success) {
-            pendingResponse.send('There was an error linking your account - please contact Jzir on TFT with when you tried to link (e.g. 5 minutes ago, 25 minutes ago, etc)');
+            pendingResponse.send('There was an error linking your account - please open a modmail by sending a DM to Contact Mods Here (bot user at the top of the server) with your issue, plus please send your POE account name there too.');
         }
         return success;
     }
