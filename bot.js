@@ -106,7 +106,7 @@ setInterval(async () => {
 }, 60000);
 
 const assignRoleThenUpdateUser = async (discordId) => {
-  return assignTftVerifiedRole(discordId).then(async () => await updateUnassignedLinkedUser(discordId), (fail) => console.err(`assigning role failed with error: ${fail}`));
+  return assignTftVerifiedRole(discordId).then(async () => await updateUnassignedLinkedUser(discordId));
 }
 
 const assignTftVerifiedRole = async (discordUserId) => {
@@ -118,7 +118,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
   } catch (e) {
     console.log(e.stack);
     console.log(e.message);
-    return Promise.reject(new Error('user does not exist'));
+    return Promise.resolve(new Error('user does not exist'));
   }
   if (guildMember) {
     await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
