@@ -106,7 +106,7 @@ setInterval(async () => {
 }, 60000);
 
 const assignRoleThenUpdateUser = async (discordId) => {
-  return assignTftVerifiedRole(discordId).then(async () => await updateUnassignedLinkedUser(discordId));
+  return assignTftVerifiedRole(discordId).then(async () => await updateUnassignedLinkedUser(discordId), (fail) => console.err(`assigning role failed with error: ${fail}`));
 }
 
 const assignTftVerifiedRole = async (discordUserId) => {
