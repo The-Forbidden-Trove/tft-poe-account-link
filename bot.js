@@ -138,3 +138,13 @@ const buildAuthorizeURL = (state) => {
   const queryParamStr = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
   return `https://www.pathofexile.com/oauth/authorize?${queryParamStr}`;
 }
+
+// Once alert is :wh: it goes in alert-history
+client.on('messageReactionAdd', async (reaction, user) => {
+    if(reaction.message.channelId == MOD_ALERT_CHANNEL_ID) {
+        if (reaction.emoji.name == ":white_check_mark:" && reaction.message.author.id == "846461921023885353") {
+          client.channels.cache.get("809553170367381534").send(`${reaction.message.content} ** - resolved by ** ${user}`);                                        
+          reaction.message.delete();
+        }
+    }
+});
