@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { Intents } = require('discord.js');
 const client = new Discord.Client({
   presence: {
     activityName: 'Message \'LINK\' to verify',
