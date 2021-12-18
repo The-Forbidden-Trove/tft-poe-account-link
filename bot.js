@@ -3,7 +3,8 @@ const client = new Discord.Client({
   presence: {
     activityName: 'Message \'LINK\' to verify',
     activityType: 'PLAYING'
-  }
+  },
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
 });
 const { v4 } = require('uuid');
 const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts, unlinkDiscordID } = require('./database');
