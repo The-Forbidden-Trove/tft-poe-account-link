@@ -4,8 +4,7 @@ const client = new Discord.Client({
   presence: {
     activityName: 'Message \'LINK\' to verify',
     activityType: 'PLAYING'
-  },
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]
+  }
 });
 const { v4 } = require('uuid');
 const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts, unlinkDiscordID } = require('./database');
@@ -140,13 +139,3 @@ const buildAuthorizeURL = (state) => {
   const queryParamStr = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
   return `https://www.pathofexile.com/oauth/authorize?${queryParamStr}`;
 }
-
-// Once alert is :wh: it goes in alert-history
-client.on('messageReactionAdd', async (reaction, user) => {
-    if(reaction.message.channelId == MOD_ALERT_CHANNEL_ID) {
-        if (reaction.emoji.name == ":white_check_mark:" && reaction.message.author.id == "846461921023885353") {
-          client.channels.cache.get("809553170367381534").send(`${reaction.message.content} ** - resolved by ** ${user}`);                                        
-          reaction.message.delete();
-        }
-    }
-});
