@@ -35,12 +35,21 @@ const getBlacklistedUserAttempts = async () => {
     discordId: row['discord_id'],
     poeAcc: row['poe_account_name']
   }));
-
+  
   if (ids.length > 0) {
     await conn.execute(`DELETE FROM ${BLACKLISTED_USER_ATTEMPT_TABLE} WHERE id IN (${ids.join(',')})`);
   }
 
   return attempts;
+}
+
+const checkBannedAccount = async (poeAcc) => {
+  var bannedStr = "<div class=\"roleLabel banned\">Banned</div>"
+  request(`https://www.pathofexile.com/account/view-profile/${poeAcc}`, function (body) {
+    if (body.includes(bannedStr)) {
+      return poeAcc;
+    }
+  })
 }
 
 const getAllUnassignedLinkedUserIds = async () => {
@@ -138,7 +147,7 @@ const linkTftPoeAccounts = async (discordId, poeAccountName) => {
   if (isLinked) {
     return;
   }
-
+  checkBannedAccount(poeAccountName);
   const connection = await getConnection();
   await connection.execute(
     `INSERT INTO ${LINK_TABLE} (poe_account_name, discord_id, datetime_linked) VALUES ("${poeAccountName}", "${discordId}", NOW())`
