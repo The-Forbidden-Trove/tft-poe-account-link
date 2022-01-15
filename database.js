@@ -1,4 +1,5 @@
 const mysql2 = require('mysql2');
+const request = require('request');
 
 const LINK_TABLE = 'tft_poe_account_links';
 const STATE_DISCORD_ID_TABLE = 'state_discord_id_temp_link';
@@ -44,12 +45,16 @@ const getBlacklistedUserAttempts = async () => {
 }
 
 const checkBannedAccount = async (poeAcc) => {
-  var bannedStr = "<div class=\"roleLabel banned\">Banned</div>"
+  var banned = false;
+  var bannedStr = "<div class=\"roleLabel banned\">Banned</div>";
   request(`https://www.pathofexile.com/account/view-profile/${poeAcc}`, function (body) {
     if (body.includes(bannedStr)) {
-      return poeAcc;
+      return banned=true;
     }
+    else
+      return banned=false;
   })
+  return banned;
 }
 
 const getAllUnassignedLinkedUserIds = async () => {
@@ -147,7 +152,6 @@ const linkTftPoeAccounts = async (discordId, poeAccountName) => {
   if (isLinked) {
     return;
   }
-  checkBannedAccount(poeAccountName);
   const connection = await getConnection();
   await connection.execute(
     `INSERT INTO ${LINK_TABLE} (poe_account_name, discord_id, datetime_linked) VALUES ("${poeAccountName}", "${discordId}", NOW())`
@@ -165,4 +169,5 @@ module.exports = {
   addBlacklistedUserAttempt,
   getBlacklistedUserAttempts,
   unlinkDiscordID,
+  checkBannedAccount,
 }
