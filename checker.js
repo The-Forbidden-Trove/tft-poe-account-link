@@ -1,5 +1,5 @@
 var mysql2 = require('mysql2');
-const request = require('request');
+const nodeFetch = require('node-fetch');
 
 const LINK_TABLE = 'tft_poe_account_links';
 const sleep = (ms) => {
@@ -29,26 +29,30 @@ const getAccounts = async () => {
 
   const bannedCheck = rows.map((row) => row['poe_account_name']);
 
-  bannedCheck.forEach(i => {
-    sleep(2000);
-    checkBannedAccount(i);
+  bannedCheck.forEach(async i => {
+    await sleep(2000);
+    await checkBannedAccount(i);
   });
 }
 
 //Checks if account is banned
 const checkBannedAccount = async (poeAcc) => {
-  var bannedStr = "<div class=\"roleLabel banned\">Banned</div>"
-  request(`https://www.pathofexile.com/account/view-profile/${poeAcc}`, function (
-    error,
-    body
-  ) {
-    console.error('error:', error)
-
-    if (body.includes(bannedStr)) {
-      console.log(poeAcc);
-      return poeAcc;
+  var bannedStr = "<div class=\"roleLabel banned\">Banned</div>";
+  // In case many banned accs suddenly try to link, we don't want to get rate limited by GGG
+  await sleep(2000);
+  const response = await nodeFetch(`https://www.pathofexile.com/account/view-profile/${poeAcc}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Host': 'www.pathofexile.com',
+      'User-Agent': 'TftPoeLinker / 1.0'
     }
-
-  })
+  });
+  const text = await response.text();
+  return text.includes(bannedStr);
 }
-getAccounts();
+
+module.exports = {
+  checkBannedAccount,
+  getAccounts
+}

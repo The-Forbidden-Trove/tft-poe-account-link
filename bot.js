@@ -6,7 +6,16 @@ const client = new Discord.Client({
   }
 });
 const { v4 } = require('uuid');
-const { createStateDiscordIdLink, getPoeTftStateLinkByDiscordId, getPoeTftStateLinkByPoeAccount, getAllUnassignedLinkedUserIds, updateUnassignedLinkedUser, getBlacklistedUserAttempts, unlinkDiscordID } = require('./database');
+const { 
+  createStateDiscordIdLink,
+  getPoeTftStateLinkByDiscordId,
+  getPoeTftStateLinkByPoeAccount,
+  getAllUnassignedLinkedUserIds,
+  updateUnassignedLinkedUser,
+  getBlacklistedUserAttempts,
+  unlinkDiscordID,
+  getBannedPoeUserAttempts
+} = require('./database');
 const dotenv = require('dotenv');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
@@ -97,11 +106,18 @@ setInterval(async () => {
 }, 30000);
 
 setInterval(async () => {
-  const blacklistLinkAttempts = await getBlacklistedUserAttempts();
   const modAlertChannel = await client.channels.fetch(MOD_ALERT_CHANNEL_ID, true);
+
+  const blacklistLinkAttempts = await getBlacklistedUserAttempts();
   blacklistLinkAttempts.forEach(async (attempt) => {
     const { discordId, poeAcc } = attempt;
     await modAlertChannel.send(`Blacklisted user with discord account ${discordId} and poe account ${poeAcc} attempted to link their account!`)
+  });
+
+  const bannedLinkAttempts = await getBannedPoeUserAttempts();
+  bannedLinkAttempts.forEach(async (attempt) => {
+    const { discordId, poeAcc } = attempt;
+    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} attempted to link their account!`)
   })
 }, 60000);
 

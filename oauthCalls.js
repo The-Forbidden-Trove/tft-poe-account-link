@@ -1,5 +1,6 @@
 const nodeFetch = require('node-fetch');
-const { linkTftPoeAccounts, addBlacklistedUserAttempt, checkBannedAccount } = require('./database');
+const { linkTftPoeAccounts, addBlacklistedUserAttempt, addBannedPoeUserAttempt } = require('./database');
+const { checkBannedAccount } = require('./checker');
 
 const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discordId, blacklist) => {
     const jsonResp = await tokenResp.json();
@@ -48,9 +49,10 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
             console.log(`blacklisted user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
-        if (checkBannedAccount(poeAccName) === true){
-            await addBlacklistedUserAttempt(discordId, poeAccName);
-            pendingResponse.send('Success!  Your POE and Discord account are now linked.');
+        const isAccountBanned = await checkBannedAccount(poeAccName);
+        if (isAccountBanned === true){
+            await addBannedPoeUserAttempt(discordId, poeAccName);
+            pendingResponse.send('Success! Your POE and Discord account are now linked.');
             console.log(`Banned user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
