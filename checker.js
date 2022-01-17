@@ -40,7 +40,8 @@ const checkBannedAccount = async (poeAcc) => {
   var bannedStr = "<div class=\"roleLabel banned\">Banned</div>";
   // In case many banned accs suddenly try to link, we don't want to get rate limited by GGG
   await sleep(2000);
-  const response = await nodeFetch(`https://www.pathofexile.com/account/view-profile/${poeAcc}`, {
+  const urlEncodedAcc = encodeURIComponent(poeAcc);
+  const response = await nodeFetch(`https://www.pathofexile.com/account/view-profile/${urlEncodedAcc}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
