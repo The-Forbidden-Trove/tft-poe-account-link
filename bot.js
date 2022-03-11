@@ -39,7 +39,7 @@ client.on('message', async (message) => {
   if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
     const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
     if (isLinked) {
-      await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker!');
+      await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to <@825395083184439316> to get verified!');
       return;
     }
     const generatedState = v4();
@@ -77,7 +77,7 @@ client.on('message', async (message) => {
         }
         const poeAccount = await getPoeTftStateLinkByDiscordId(splitContent[1]);
         if (poeAccount !== false && poeAccount > "") {
-          await message.channel.send(`The POE account linked to discord id ${splitContent[1]} is ${poeAccount}`);
+          await message.channel.send(`The POE account linked to discord id ${splitContent[1]} (<@${splitContent[1]}>) is ${poeAccount}`);
           await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}`)
           return
         }
@@ -87,7 +87,7 @@ client.on('message', async (message) => {
       if (lowerCaseContent.includes(process.env.chkpoecmd) || lowerCaseContent.includes('cpl')) {
         const discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1]);
         if (discordId !== false && discordId > "") {
-          await message.channel.send(`The discord id linked to the POE account ${splitContent[1]} is ${discordId}`);
+          await message.channel.send(`The discord id linked to the POE account ${splitContent[1]} is ${discordId} (<@${discordId}>)`);
           await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(splitContent[1])}`)
           return;
         }
@@ -111,13 +111,13 @@ setInterval(async () => {
   const blacklistLinkAttempts = await getBlacklistedUserAttempts();
   blacklistLinkAttempts.forEach(async (attempt) => {
     const { discordId, poeAcc } = attempt;
-    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} and poe account ${poeAcc} attempted to link their account!`)
+    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} (<@${discordId}>) and poe account ${poeAcc} attempted to link their account!`)
   });
 
   const bannedLinkAttempts = await getBannedPoeUserAttempts();
   bannedLinkAttempts.forEach(async (attempt) => {
     const { discordId, poeAcc } = attempt;
-    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} attempted to link their account!`)
+    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} (<@${discordId}>) attempted to link their account!`)
   })
 }, 60000);
 
