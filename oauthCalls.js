@@ -45,21 +45,21 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
 
         if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
             await addBlacklistedUserAttempt(discordId, poeAccName);
-            pendingResponse.send('Success!  Your POE and Discord account are now linked.');
+            pendingResponse.send('Success!  Your POE and Discord account are now linked. Please open a modmail by sending a DM to Contact Mods Here (bot user at the top of the server) to get verified.');
             console.log(`blacklisted user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
         const isAccountBanned = await checkBannedAccount(poeAccName);
         if (isAccountBanned === true){
             await addBannedPoeUserAttempt(discordId, poeAccName);
-            pendingResponse.send('Success! Your POE and Discord account are now linked.');
+            pendingResponse.send('Success! Your POE and Discord account are now linked. Please open a modmail by sending a DM to Contact Mods Here (bot user at the top of the server) to get verified.');
             console.log(`Banned user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
 
 
         await linkTftPoeAccounts(discordId, poeAccName);
-        pendingResponse.send('Success! Your POE and Discord account are now linked.');
+        pendingResponse.send('Success! Your POE and Discord account are now linked. Please open a modmail by sending a DM to Contact Mods Here (bot user at the top of the server) to get verified.');
         return true;
     }, (rejectProfileReason) => {
         console.log(`rejectProfileReason: ${JSON.stringify(rejectProfileReason)}`)
