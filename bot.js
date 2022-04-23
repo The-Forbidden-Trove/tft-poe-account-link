@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const fr = require('fs');
 const client = new Discord.Client({
   presence: {
     activityName: 'Message \'LINK\' to verify',
@@ -14,7 +15,8 @@ const {
   updateUnassignedLinkedUser,
   getBlacklistedUserAttempts,
   unlinkDiscordID,
-  getBannedPoeUserAttempts
+  getBannedPoeUserAttempts,
+  getAllDataFromDB
 } = require('./database');
 const dotenv = require('dotenv');
 
@@ -68,6 +70,17 @@ client.on('message', async (message) => {
         console.log(unlink);
         await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
         return;
+      }
+
+      if (lowerCaseContent.includes(process.env.chkDiscCmd) || lowerCaseContent.includes('dldata')) {
+        const data = await getAllDataFromDB;
+        if (data.length > 1800) {
+          fs.writeFile('linkeddata.txt', data);
+          message.channel.send("Data ready for download.", { files: ["./linkeddata.txt"] });
+        }
+        else {
+          await message.channel.send(`${data}`);
+        }
       }
 
       if (lowerCaseContent.includes(process.env.chkDiscCmd) || lowerCaseContent.includes('cdl')) {
