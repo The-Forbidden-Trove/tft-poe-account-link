@@ -1,5 +1,5 @@
 const mysql2 = require('mysql2');
-
+const fs = require('fs');
 const LINK_TABLE = 'tft_poe_account_links';
 const STATE_DISCORD_ID_TABLE = 'state_discord_id_temp_link';
 const BLACKLISTED_USER_ATTEMPT_TABLE = 'blacklisted_user_link_attempts';
