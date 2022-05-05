@@ -92,7 +92,8 @@ const getAllDataFromDB = async () => {
   for (let i = 0; i < rows.length; i++) {
     data += `${rows[i]['poe_account_name']}\t${rows[i]['discord_id']}\n`
   }
-  return data
+  fs.writeFile('linkeddata.txt', data);
+  return data;
 }
 
 
