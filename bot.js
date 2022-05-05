@@ -73,6 +73,7 @@ client.on('message', async (message) => {
 
       if (lowerCaseContent.includes(process.env.chkDiscCmd) || lowerCaseContent.includes('dldata')) {
         const data = await getAllDataFromDB();
+        console.log(data);
         await message.channel.send("Data ready for download.", { files: ["./linkeddata.txt"] });
       }
 
