@@ -41,9 +41,7 @@ describe('api/profile tests', () => {
             },
             {
                 send: jest.fn(),
-            },
-            38953945739543,
-            []
+            }
         );
 
         expect(success).toBe(true);
