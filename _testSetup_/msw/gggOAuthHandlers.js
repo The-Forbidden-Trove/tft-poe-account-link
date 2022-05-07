@@ -8,6 +8,14 @@ const handlers = [
         return res(
             ctx.json(response)
         );
+    }),
+    rest.get(/.*pathofexile.com\/account\/view-profile\/.*/, (_, res, ctx) => {
+        const response = {
+            text: ''
+        };
+        return res(
+            ctx.json(response)
+        );
     })
 ];
 
