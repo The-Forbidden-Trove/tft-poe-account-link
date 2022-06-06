@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { getDiscordIdStateLink } = require('./database');
 const { callProfileApiWithRetryBackoff } = require('./oauthCalls');
 const { getBlacklistedAccountNames } = require('./blacklist');
+var path = require('path');
 
 if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
   dotenv.config({ path: __dirname + '/.env_dev' });
