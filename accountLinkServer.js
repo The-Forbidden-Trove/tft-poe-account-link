@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 
 const app = express();
 const port = 4050;
+app.use(express.static(path.join(__dirname, 'public')));
 
 let blacklist;
 
