@@ -19,7 +19,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
             }
         }
         if (!success) {
-            pendingResponse.sendFile('error.html');
+            pendingResponse.sendFile(__dirname + '/error.html');
         }
         return success;
     }
@@ -45,21 +45,21 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
 
         if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
             await addBlacklistedUserAttempt(discordId, poeAccName);
-            pendingResponse.sendFile('linked.html');
+            pendingResponse.sendFile(__dirname + '/linked.html');
             console.log(`blacklisted user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
         const isAccountBanned = await checkBannedAccount(poeAccName);
         if (isAccountBanned === true){
             await addBannedPoeUserAttempt(discordId, poeAccName);
-            pendingResponse.sendFile('linked.html');
+            pendingResponse.sendFile(__dirname + '/linked.html');
             console.log(`Banned user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
 
 
         await linkTftPoeAccounts(discordId, poeAccName);
-        pendingResponse.sendFile('linked.html');
+        pendingResponse.sendFile(__dirname + '/linked.html');
         return true;
     }, (rejectProfileReason) => {
         console.log(`rejectProfileReason: ${JSON.stringify(rejectProfileReason)}`)
