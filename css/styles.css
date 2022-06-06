@@ -1,0 +1,65 @@
+* {
+    font-family: "Fontin SmallCaps";
+}
+header {
+    display:flex;
+    width:100%;
+    place-content: left;
+    -webkit-box-align: center;
+    align-items: center;
+}
+#logo {
+    width:74px;
+    height:74px;
+    margin-left:20px;
+    margin-top:5px;
+    margin-right:5px;
+}
+header p {
+    font-size:24px;
+    color:rgb(232, 230, 227);
+}
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    background: linear-gradient(0deg, rgba(6, 10, 23, 0.9), rgba(10, 14, 28, 0.7), rgba(12, 18, 33, 0.7), rgba(14, 21, 38, 0.7), rgba(15, 24, 43, 0.7), rgba(16, 26, 49, 0.7), rgba(16, 29, 54, 0.7)) 0% 0% / 100%, url(https://www.pathofexile.com/image/layout/harvest-bg.jpg), center center no-repeat;
+    background-image: linear-gradient(0deg, rgba(6, 10, 23, 0.9), rgba(10, 14, 28, 0.7), rgba(12, 18, 33, 0.7), rgba(14, 21, 38, 0.7), rgba(15, 24, 43, 0.7), rgba(16, 26, 49, 0.7), rgba(16, 29, 54, 0.7)), url(https://www.pathofexile.com/image/layout/harvest-bg.jpg), initial;
+    background-position-x: initial, initial, center;
+    background-position-y: initial, initial, center;
+    background-size: 100%;
+    background-repeat-x: initial, initial, no-repeat;
+    background-repeat-y: initial, initial, no-repeat;
+    background-attachment: initial, initial, initial;
+    background-origin: initial, initial, initial;
+    background-clip: initial, initial, initial;
+    background-color: initial;
+    overflow: hidden;
+}
+
+h1, span, p {
+    color:white;
+}
+
+.bold {
+    font-weight:700;
+}
+
+.warning {
+    color:rgb(71, 180, 213);
+}
+
+#main {
+    border: 3px solid rgb(37, 38, 42);
+    border-color: rgb(127, 118, 104);
+    border-radius:20px;
+    padding: 0px 40px 40px 40px;
+    background:rgb(4 7 16);
+}
+
+a {
+    color:lightgray;
+}
