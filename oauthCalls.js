@@ -42,6 +42,12 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
             return false;
         }
         const poeAccName = profileRespJson.name;
+        const poeAccRealm = profileRespJson.realm;
+
+        if (poeAccRealm != "pc") {
+            pendingResponse.sendFile(__dirname + '/error.html');
+            return false;
+        }
 
         if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
             await addBlacklistedUserAttempt(discordId, poeAccName);
