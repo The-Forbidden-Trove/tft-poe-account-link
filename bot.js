@@ -20,6 +20,7 @@ const {
 const dotenv = require('dotenv');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
+const MODMAIL_CATEGORY = '834148931213852743';
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
 const MOD_ALERT_CHANNEL_ID = process.env.modAlertChannelId;
@@ -48,6 +49,24 @@ client.on('message', async (message) => {
     await message.author.dmChannel.send(
       `Click here to authorize with the GGG oauth servers: ${buildAuthorizeURL(generatedState)}`
     );
+  }
+
+  // handler for modmail CDL
+  if (message.channel.parent == MODMAIL_CATEGORY) {
+    const lowerCaseContent = message.content.toLowerCase();
+    if (lowerCaseContent.startsWith('=cdl')) {
+      let channelDescription = message.channel.topic;
+      let userId = channelDescription.match(/ModMail Channel (\d+)/)[1];
+
+      const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
+      if (poeAccount !== false && poeAccount > "") {
+        await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount}`);
+        await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}`)
+        return
+      }
+      await message.channel.send(`No POE account found for discord id ${userId}`);
+      return;
+    }
   }
 
   if (message.channel.id === BOT_CONTROL_CHANNEL_ID) {
