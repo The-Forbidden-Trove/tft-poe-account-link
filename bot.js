@@ -54,10 +54,23 @@ client.on('message', async (message) => {
   // handler for modmail CDL
   if (message.channel.parent == MODMAIL_CATEGORY) {
     const lowerCaseContent = message.content.toLowerCase();
+    let channelDescription = message.channel.topic;
+    let userId = channelDescription.match(/ModMail Channel (\d+)/)[1];
+    const botControl = client.channels.cache.find(channel => channel.id === "716528634092847154")
+    if (lowerCaseContent.startsWith('=unlink')) {
+      if (lowerCaseContent.includes('unlink') && (message.member.roles.cache.find(r => r.id === "727715562037313566") || message.member.roles.cache.find(r => r.id === "721971308618842184"))) {
+        console.log(`unlink initiated`)
+        if (isNaN(userId)) {
+          await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
+          return;
+        }
+        const unlink = await unlinkDiscordID(userId);
+        console.log(unlink);
+        await botControl.send(`Discord account with id ${userId} was successfully unlinked.`);
+        return;
+      }
+    }
     if (lowerCaseContent.startsWith('=cdl')) {
-      let channelDescription = message.channel.topic;
-      let userId = channelDescription.match(/ModMail Channel (\d+)/)[1];
-
       const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
       if (poeAccount !== false && poeAccount > "") {
         await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount}`);
