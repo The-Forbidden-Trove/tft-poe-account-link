@@ -61,7 +61,7 @@ client.on('message', async (message) => {
       if (lowerCaseContent.includes('unlink') && (message.member.roles.cache.find(r => r.id === "727715562037313566") || message.member.roles.cache.find(r => r.id === "721971308618842184"))) {
         console.log(`unlink initiated`)
         if (isNaN(userId)) {
-          await message.channel.send(`Given argument ${splitContent[1]} is not a valid discord id`);
+          await message.channel.send(`Given argument ${userId} is not a valid discord id`);
           return;
         }
         const unlink = await unlinkDiscordID(userId);
