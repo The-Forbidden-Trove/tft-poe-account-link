@@ -66,7 +66,8 @@ client.on('message', async (message) => {
         }
         const unlink = await unlinkDiscordID(userId);
         console.log(unlink);
-        await botControl.send(`Discord account with id ${userId} was successfully unlinked.`);
+        await botControl.send(`Discord account with id ${userId} was successfully unlinked (from within a modmail).`);
+        await message.channel.send(`Discord account with id ${userId} was successfully unlinked.`);
         return;
       }
     }
