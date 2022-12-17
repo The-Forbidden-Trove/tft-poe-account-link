@@ -191,10 +191,12 @@ const notifyModmailLink = async (discordUserId) => {
       "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
       "color": 0xff448e
   }
-  try {
-    await userChannel.send({ embeds: [infoEmbed] });
-  } catch (e) {
-    console.log(e);
+  if (userChannel) {
+    try {
+      await userChannel.send({ embeds: [infoEmbed] });
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
