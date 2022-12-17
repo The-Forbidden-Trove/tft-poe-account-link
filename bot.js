@@ -184,14 +184,18 @@ const assignTftVerifiedRole = async (discordUserId) => {
 
 const notifyModmailLink = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
-  const userChannel = await guild.channels.cache.find(channel => channel.type == 0 && channel.parentId && channel.parentId == MODMAIL_CATEGORY && channel.topic && channel.topic.search(discordUserId) != -1);
+  const userChannel = await guild.channels.fetch().then(find(channel => channel.type == 0 && channel.parentId && channel.parentId == MODMAIL_CATEGORY && channel.topic && channel.topic.search(discordUserId) != -1));
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
       "title": `ℹ️ User Linked ℹ️`,
       "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
       "color": 0xff448e
   }
-  await userChannel.send({ embeds: [infoEmbed] });
+  try {
+    await userChannel.send({ embeds: [infoEmbed] });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 const buildAuthorizeURL = (state) => {
