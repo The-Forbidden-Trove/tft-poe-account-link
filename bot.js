@@ -100,6 +100,7 @@ client.on('message', async (message) => {
           return;
         }
         const unlink = await unlinkDiscordID(splitContent[1]);
+        console.log(unlink);
         await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
         return;
       }
