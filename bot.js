@@ -42,6 +42,7 @@ client.on('message', async (message) => {
     const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
     if (isLinked) {
       await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
+      await assignTftVerifiedRole(message.author.id);
       return;
     }
     const generatedState = v4();
