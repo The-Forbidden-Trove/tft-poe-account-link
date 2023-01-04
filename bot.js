@@ -185,7 +185,8 @@ const assignTftVerifiedRole = async (discordUserId) => {
 
 const notifyModmailLink = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
-  let userChannel = guild.channels.cache.find(channel => channel.parentId == MODMAIL_CATEGORY && channel.topic.match(discordUserId));
+  let regex = new RegExp(discordUserId);
+  let userChannel = guild.channels.cache.find(channel => channel.parentId == MODMAIL_CATEGORY && channel.topic.match(regex));
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
       "title": `ℹ️ User Linked ℹ️`,
