@@ -41,6 +41,8 @@ client.on('message', async (message) => {
   if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
     const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
     if (isLinked) {
+      const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
+      let user = guild.users
       await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
       await assignTftVerifiedRole(message.author.id);
       return;
@@ -100,7 +102,6 @@ client.on('message', async (message) => {
           return;
         }
         const unlink = await unlinkDiscordID(splitContent[1]);
-        console.log(unlink);
         await message.channel.send(`Discord account with id ${splitContent[1]} was successfully unlinked.`);
         return;
       }
@@ -185,7 +186,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
 
 const notifyModmailLink = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
-  let userChannel = guild.channels.cache.find(channel => channel.parentId == MODMAIL_CATEGORY && channel.topic.match(discordUserId));
+  let userChannel = guild.channels.find(channel => channel.parentId == MODMAIL_CATEGORY && channel.topic.match(discordUserId));
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
       "title": `ℹ️ User Linked ℹ️`,
