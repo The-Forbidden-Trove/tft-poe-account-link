@@ -15,7 +15,8 @@ const {
   getBlacklistedUserAttempts,
   unlinkDiscordID,
   getBannedPoeUserAttempts,
-  getAllDataFromDB
+  getAllDataFromDB,
+  getPoeUuidByDiscordId
 } = require('./database');
 const dotenv = require('dotenv');
 
