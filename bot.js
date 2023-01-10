@@ -78,7 +78,7 @@ client.on('message', async (message) => {
       const poeUuid = await getPoeUuidByDiscordId(userId);
       if (poeAccount !== false && poeAccount > "") {
         await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
-        await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}`)
+        await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}`)
         return
       }
       await message.channel.send(`No POE account found for discord id ${userId}`);
@@ -121,7 +121,7 @@ client.on('message', async (message) => {
         const poeAccount = await getPoeTftStateLinkByDiscordId(splitContent[1]);
         if (poeAccount !== false && poeAccount > "") {
           await message.channel.send(`The POE account linked to discord id ${splitContent[1]} (<@${splitContent[1]}>) is ${poeAccount} [${poeUuid}]`);
-          await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${splitContent[1]}`)
+          await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${splitContent[1]}&uuid=${poeUuid}`)
           return
         }
         await message.channel.send(`No POE account found for discord id ${splitContent[1]}`);
