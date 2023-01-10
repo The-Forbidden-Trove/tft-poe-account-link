@@ -120,7 +120,7 @@ client.on('message', async (message) => {
         }
         const poeAccount = await getPoeTftStateLinkByDiscordId(splitContent[1]);
         if (poeAccount !== false && poeAccount > "") {
-          await message.channel.send(`The POE account linked to discord id ${splitContent[1]} (<@${splitContent[1]}>) is ${poeAccount}`);
+          await message.channel.send(`The POE account linked to discord id ${splitContent[1]} (<@${splitContent[1]}>) is ${poeAccount} [${poeUuid}]`);
           await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${splitContent[1]}`)
           return
         }
