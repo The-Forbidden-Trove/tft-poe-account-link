@@ -67,7 +67,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         }
 
 
-        await linkTftPoeAccounts(discordId, poeAccName);
+        await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
         pendingResponse.sendFile(__dirname + '/linked.html');
         return true;
     }, (rejectProfileReason) => {

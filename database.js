@@ -116,6 +116,28 @@ const getPoeTftStateLinkByDiscordId = async (discordId) => {
   return retVal;
 }
 
+const getPoeUuidByDiscordId = async (discordId) => {
+  const conn = await getConnection();
+  const [rows] = await conn.execute(
+    `SELECT uuid FROM ${LINK_TABLE} WHERE discord_id = ?`,
+    [discordId]
+  );
+
+  let retVal = false
+
+  if (rows.length > 0) {
+    if (rows.length === 1) {
+      retVal = rows[0]['uuid'];
+      if (retVal == null) {
+        return false;
+      }
+    } else {
+      console.log(`User somehow has more than two entries in ${LINK_TABLE} for discord id ${discordId}`);
+    }
+  }
+  return retVal;
+}
+
 const getPoeTftStateLinkByPoeAccount = async (poeAccountName) => {
   const conn = await getConnection();
   const [rows] = await conn.execute(
@@ -171,14 +193,14 @@ const getDiscordIdStateLink = async (state) => {
 
 
 
-const linkTftPoeAccounts = async (discordId, poeAccountName) => {
+const linkTftPoeAccounts = async (discordId, poeAccountName, uuid) => {
   const isLinked = await getPoeTftStateLinkByDiscordId(discordId);
   if (isLinked) {
     return;
   }
   const connection = await getConnection();
   await connection.execute(
-    `INSERT INTO ${LINK_TABLE} (poe_account_name, discord_id, datetime_linked) VALUES ("${poeAccountName}", "${discordId}", NOW())`
+    `INSERT INTO ${LINK_TABLE} (poe_account_name, discord_id, datetime_linked, uuid) VALUES ("${poeAccountName}", "${discordId}", NOW(), "${uuid}")`
   );
 }
 
@@ -187,6 +209,7 @@ module.exports = {
   getDiscordIdStateLink,
   linkTftPoeAccounts,
   getPoeTftStateLinkByDiscordId,
+  getPoeUuidByDiscordId,
   getPoeTftStateLinkByPoeAccount,
   getAllUnassignedLinkedUserIds,
   updateUnassignedLinkedUser,
