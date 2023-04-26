@@ -208,7 +208,7 @@ const buildAuthorizeURL = (state) => {
   const params = {
     client_id: process.env.clientId,
     response_type: 'code',
-    scope: 'account:profile,account:characters',
+    scope: 'account:profile',
     state: state,
     redirect_uri: "https://theforbiddentrove.xyz/oauth_redirect",
     prompt: "consent"
