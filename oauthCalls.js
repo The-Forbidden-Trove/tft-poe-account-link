@@ -44,8 +44,8 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         const poeAccName = profileRespJson.name;
         const poeAccRealm = profileRespJson.realm;
         const poeAccUUID = profileRespJson.uuid;
-
-        console.log(poeAccUUID);
+        const poeCharName = await callCharactersApi(accessToken);
+        console.log(poeCharName);
 
         if (poeAccRealm != "pc") {
             pendingResponse.sendFile(__dirname + '/error.html');
@@ -80,6 +80,31 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
 
     return resp;
 }
+
+const callCharactersApi = async (accessToken) => {
+    const resp = await nodeFetch('https://www.pathofexile.com/api/characters', {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Host': 'www.pathofexile.com',
+            'User-Agent': 'TftPoeLinker / 1.0'
+        },
+    }).then(async (charactersResp) => {
+        const charactersRespJson = await charactersResp.json();
+        if (charactersRespJson['error'] !== undefined) {
+            return false;
+        }
+        const poeCharacters = charactersRespJson.characters;
+        return poeCharacters;
+    }, (rejectProfileReason) => {
+        console.log(`rejectProfileReason: ${JSON.stringify(rejectProfileReason)}`)
+        return false;
+    }).catch((reason) => {
+        console.log(`exception in api/profile call: ${reason}`);
+        return false;
+    });
+    return resp;
+}
+
 
 module.exports = {
     callProfileApiWithRetryBackoff,
