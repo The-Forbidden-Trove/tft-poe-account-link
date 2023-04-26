@@ -50,7 +50,7 @@ app.get('/oauth_redirect', async (req, res) => {
       grant_type: "authorization_code",
       code: req.query.code,
       redirect_uri: "https://theforbiddentrove.xyz/oauth_redirect",
-      scope: "account:profile",
+      scope: "account:profile account:characters",
       state: req.query.state
     }),
     headers: {
