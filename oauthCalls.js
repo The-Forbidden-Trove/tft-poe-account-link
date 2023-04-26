@@ -89,6 +89,7 @@ const callCharactersApi = async (accessToken) => {
             'User-Agent': 'TftPoeLinker / 1.0'
         },
     }).then(async (charactersResp) => {
+        console.log(charactersResp);
         const charactersRespJson = await charactersResp.json();
         if (charactersRespJson['error'] !== undefined) {
             return false;
