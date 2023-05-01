@@ -82,7 +82,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
 }
 
 const callCharactersApi = async (accessToken) => {
-    const resp = await nodeFetch('https://www.pathofexile.com/api/characters', {
+    const resp = await nodeFetch('https://www.pathofexile.com/api/character', {
         headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Host': 'www.pathofexile.com',
