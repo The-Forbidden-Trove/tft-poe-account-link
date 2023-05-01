@@ -44,8 +44,8 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         const poeAccName = profileRespJson.name;
         const poeAccRealm = profileRespJson.realm;
         const poeAccUUID = profileRespJson.uuid;
-        const poeCharName = await callCharactersApi(accessToken);
-        console.log(poeCharName);
+        //const poeCharName = await callCharactersApi(accessToken);
+        //console.log(poeCharName);
 
         if (poeAccRealm != "pc") {
             pendingResponse.sendFile(__dirname + '/error.html');
