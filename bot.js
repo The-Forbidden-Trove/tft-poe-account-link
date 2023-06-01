@@ -154,14 +154,14 @@ setInterval(async () => {
 
   const blacklistLinkAttempts = await getBlacklistedUserAttempts();
   blacklistLinkAttempts.forEach(async (attempt) => {
-    const { discordId, poeAcc } = attempt;
-    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} (<@${discordId}>) and poe account ${poeAcc} attempted to link their account!`)
+    const { discordId, poeAcc, poeAccUUID } = attempt;
+    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} (<@${discordId}>) and poe account ${poeAcc} with UUID ${poeAccUUID} attempted to link their account!`)
   });
 
   const bannedLinkAttempts = await getBannedPoeUserAttempts();
   bannedLinkAttempts.forEach(async (attempt) => {
-    const { discordId, poeAcc } = attempt;
-    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} (<@${discordId}>) attempted to link their account!`)
+    const { discordId, poeAcc, poeAccUUID } = attempt;
+    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} (<@${discordId}>)  with UUID ${poeAccUUID} attempted to link their account!`)
   })
 }, 60000);
 
