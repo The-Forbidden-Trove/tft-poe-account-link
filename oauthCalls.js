@@ -53,14 +53,14 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         }
 
         if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
-            await addBlacklistedUserAttempt(discordId, poeAccName);
+            await addBlacklistedUserAttempt(discordId, poeAccName, poeAccUUID);
             pendingResponse.sendFile(__dirname + '/linked.html');
             console.log(`blacklisted user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
         }
         const isAccountBanned = await checkBannedAccount(poeAccName);
         if (isAccountBanned === true){
-            await addBannedPoeUserAttempt(discordId, poeAccName);
+            await addBannedPoeUserAttempt(discordId, poeAccName, poeAccUUID);
             pendingResponse.sendFile(__dirname + '/linked.html');
             console.log(`Banned user link attempt at ${new Date()} for ${poeAccName} and ${discordId}`);
             return true;
