@@ -6,7 +6,7 @@ const client = new Discord.Client({
   }
 });
 const { v4 } = require('uuid');
-const { 
+const {
   createStateDiscordIdLink,
   getPoeTftStateLinkByDiscordId,
   getPoeTftStateLinkByPoeAccount,
@@ -158,14 +158,14 @@ setInterval(async () => {
 
   const blacklistLinkAttempts = await getBlacklistedUserAttempts();
   blacklistLinkAttempts.forEach(async (attempt) => {
-    const { discordId, poeAcc } = attempt;
-    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} (<@${discordId}>) and poe account ${poeAcc} attempted to link their account!`)
+    const { discordId, poeAcc, uuid } = attempt;
+    await modAlertChannel.send(`Blacklisted user with discord account ${discordId} (<@${discordId}>) and poe account ${poeAcc} and uuid ${uuid} attempted to link their account!`)
   });
 
   const bannedLinkAttempts = await getBannedPoeUserAttempts();
   bannedLinkAttempts.forEach(async (attempt) => {
-    const { discordId, poeAcc } = attempt;
-    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} (<@${discordId}>) attempted to link their account!`)
+    const { discordId, poeAcc, uuid } = attempt;
+    await modAlertChannel.send(`Banned POE account ${poeAcc} with discord account ${discordId} (<@${discordId}>) and uuid ${uuid} attempted to link their account!`)
   })
 }, 60000);
 
@@ -197,15 +197,15 @@ const notifyModmailLink = async (discordUserId) => {
   let userChannel = guild.channels.cache.find(channel => channel.parentId == MODMAIL_CATEGORY && channel.topic.includes(regex));
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
-      "title": `ℹ️ User Linked ℹ️`,
-      "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
-      "color": 0xff448e
+    "title": `ℹ️ User Linked ℹ️`,
+    "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
+    "color": 0xff448e
   }
-    try {
-      await userChannel.send({ embeds: [infoEmbed] });
-    } catch (e) {
-      console.log(e);
-    }
+  try {
+    await userChannel.send({ embeds: [infoEmbed] });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 const buildAuthorizeURL = (state) => {

@@ -19,24 +19,25 @@ const getConnection = async () => {
   return pool.promise();
 }
 
-const addBlacklistedUserAttempt = async (discordId, poeAccountName) => {
+const addBlacklistedUserAttempt = async (discordId, poeAccountName, poeAccountUuid) => {
   const connection = await getConnection();
-  await connection.execute(`INSERT INTO ${BLACKLISTED_USER_ATTEMPT_TABLE} (discord_id, poe_account_name) VALUES ("${discordId}", "${poeAccountName}")`);
+  await connection.execute(`INSERT INTO ${BLACKLISTED_USER_ATTEMPT_TABLE} (discord_id, poe_account_name, poe_account_uuid) VALUES ("${discordId}", "${poeAccountName}", "${poeAccountUuid}")`);
 };
 
 const getBlacklistedUserAttempts = async () => {
   const conn = await getConnection();
   const [rows] = await conn.execute(
-    `SELECT id, discord_id, poe_account_name FROM ${BLACKLISTED_USER_ATTEMPT_TABLE}`
+    `SELECT id, discord_id, poe_account_name, poe_account_uuid FROM ${BLACKLISTED_USER_ATTEMPT_TABLE}`
   );
 
   const ids = rows.map((row) => row['id']);
 
   const attempts = rows.map((row) => ({
     discordId: row['discord_id'],
-    poeAcc: row['poe_account_name']
+    poeAcc: row['poe_account_name'],
+    uuid: row['poe_account_uuid']
   }));
-  
+
   if (ids.length > 0) {
     await conn.execute(`DELETE FROM ${BLACKLISTED_USER_ATTEMPT_TABLE} WHERE id IN (${ids.join(',')})`);
   }
@@ -44,24 +45,25 @@ const getBlacklistedUserAttempts = async () => {
   return attempts;
 }
 
-const addBannedPoeUserAttempt = async (discordId, poeAccountName) => {
+const addBannedPoeUserAttempt = async (discordId, poeAccountName, poeAccountUuid) => {
   const connection = await getConnection();
-  await connection.execute(`INSERT INTO ${BANNED_POE_ACCOUNT_ATTEMPT_TABLE} (discord_id, poe_account_name) VALUES ("${discordId}", "${poeAccountName}")`);
+  await connection.execute(`INSERT INTO ${BANNED_POE_ACCOUNT_ATTEMPT_TABLE} (discord_id, poe_account_name, poe_account_uuid) VALUES ("${discordId}", "${poeAccountName}", "${poeAccountUuid}")`);
 };
 
 const getBannedPoeUserAttempts = async () => {
   const conn = await getConnection();
   const [rows] = await conn.execute(
-    `SELECT id, discord_id, poe_account_name FROM ${BANNED_POE_ACCOUNT_ATTEMPT_TABLE}`
+    `SELECT id, discord_id, poe_account_name, poe_account_uuid FROM ${BANNED_POE_ACCOUNT_ATTEMPT_TABLE}`
   );
 
   const ids = rows.map((row) => row['id']);
 
   const attempts = rows.map((row) => ({
     discordId: row['discord_id'],
-    poeAcc: row['poe_account_name']
+    poeAcc: row['poe_account_name'],
+    uuid: row['poe_account_uuid']
   }));
-  
+
   if (ids.length > 0) {
     await conn.execute(`DELETE FROM ${BANNED_POE_ACCOUNT_ATTEMPT_TABLE} WHERE id IN (${ids.join(',')})`);
   }
