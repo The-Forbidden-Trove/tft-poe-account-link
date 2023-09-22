@@ -81,7 +81,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
     return resp;
 }
 
-export const callCharactersApi = async (accessToken) => {
+const callCharactersApi = async (accessToken) => {
     const resp = await nodeFetch('https://www.pathofexile.com/api/character', {
         headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -109,4 +109,5 @@ export const callCharactersApi = async (accessToken) => {
 
 module.exports = {
     callProfileApiWithRetryBackoff,
+    callCharactersApi,
 }
