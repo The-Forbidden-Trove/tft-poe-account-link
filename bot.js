@@ -194,7 +194,7 @@ const notifyModmailLink = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
   const category = guild.channels.cache.get(MODMAIL_CATEGORY);
   let regex = new RegExp(discordUserId);
-  let userChannels = category.children.filter(channel => regex.test(channel.topic));
+  let userChannel = category.children.filter(channel => regex.test(channel.topic));
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
     "title": `ℹ️ User Linked ℹ️`,
