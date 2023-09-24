@@ -203,7 +203,11 @@ const notifyModmailLink = async (discordUserId) => {
   }
   try {
     for (const channel of userChannel) {
-      await channel.send({ embeds: [infoEmbed] });
+      try {
+        await channel.send({ embeds: [infoEmbed] });
+      } catch (e) {
+        console.error(`Error sending message to channel ${channel.id}: ${e.message}`);
+      }
     }
   } catch (e) {
     console.log(e);
