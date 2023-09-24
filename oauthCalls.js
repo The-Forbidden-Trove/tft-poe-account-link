@@ -109,4 +109,5 @@ const callCharactersApi = async (accessToken) => {
 
 module.exports = {
     callProfileApiWithRetryBackoff,
+    callCharactersApi,
 }
