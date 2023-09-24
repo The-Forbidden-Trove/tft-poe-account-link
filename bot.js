@@ -192,9 +192,9 @@ const assignTftVerifiedRole = async (discordUserId) => {
 
 const notifyModmailLink = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
-  console.log(guild.channels.cache.filter(channel => channel.parentId === MODMAIL_CATEGORY));
+  const category = guild.channels.cache.get(MODMAIL_CATEGORY);
   let regex = new RegExp(discordUserId);
-  let userChannel = guild.channels.cache.find(channel => channel.parentId == MODMAIL_CATEGORY && channel.topic.includes(regex));
+  let userChannel = category.children.filter(channel => channel.topic.includes(regex));
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
     "title": `ℹ️ User Linked ℹ️`,
@@ -202,7 +202,9 @@ const notifyModmailLink = async (discordUserId) => {
     "color": 0xff448e
   }
   try {
-    await userChannel.send({ embeds: [infoEmbed] });
+    for (const channel of userChannel) {
+      await channel.send({ embeds: [infoEmbed] });
+    }
   } catch (e) {
     console.log(e);
   }
