@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
   presence: {
-    activityName: 'Message \'LINK\' to verify',
+    activityName: 'DM me to verify',
     activityType: 'PLAYING'
   }
 });
