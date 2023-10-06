@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity('Message \'link\' to verify')
+  client.user.setActivity('DM me to verify')
     .then(presence => console.log(`Activity set to ${JSON.stringify(presence)}`))
     .catch((err) => console.log(`ERROR SETTING ACTIVITY: ${err}`));
 });
