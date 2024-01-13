@@ -72,23 +72,16 @@ client.on('threadCreate',
 
 client.on('messageCreate', async (message) => {
   // is private message
-  // console.log(`message.author.dmChannel: ${message.author.dmChannel}`)
-  // console.log(`message.channel.id: ${message.channel.id}`)
-  // console.log(`message.author.dmChannel.id: ${message.author.dmChannel?.id}`)
-  // console.log(`content: ${message.dmChannel && message.content}`);
-  if (message.channel.type === 'DM') {
-    console.log(`foo: ${message.content} -- ${message.channel.id}`)
-  }
-  if (message.channel.type === 'DM') {
+  if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
     const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
     if (isLinked) {
-      await message.channel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
+      await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
       await assignTftVerifiedRole(message.author.id);
       return;
     }
     const generatedState = v4();
     await createStateDiscordIdLink(generatedState, message.author.id);
-    await message.channel.send(
+    await message.author.dmChannel.send(
       `Click here to authorize with the GGG oauth servers: ${buildAuthorizeURL(generatedState)}`
     );
   }
