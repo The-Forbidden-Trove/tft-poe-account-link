@@ -54,6 +54,7 @@ client.on('threadCreate',
    * @param {Discord.ThreadChannel} thread 
    */
   async (thread) => {
+    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- ${thread.parentId} -- ${thread.partial}`)
     if (thread.parentId === REMOVE_TR_CHANNEL_ID) {
       const dynoMsg = thread.lastMessage;
       if (!dynoMsg) {
