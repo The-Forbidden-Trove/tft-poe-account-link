@@ -71,7 +71,8 @@ client.on('messageCreate', async (message) => {
   // is private message
   console.log(`message.author.dmChannel: ${message.author.dmChannel}`)
   console.log(`message.channel.id: ${message.channel.id}`)
-  console.log(`message.author.dmChannel.id: ${message.author.dmChannel.id}`)
+  console.log(`message.author.dmChannel.id: ${message.author.dmChannel?.id}`)
+  console.log(`content: ${message.dmChannel && message.content}`);
   if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
     const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
     if (isLinked) {
