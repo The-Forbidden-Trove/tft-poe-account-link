@@ -11,6 +11,8 @@ const client = new Discord.Client({
     Discord.Intents.FLAGS.MESSAGE_CONTENT,
     Discord.Intents.FLAGS.GUILD_MESSAGES,
     Discord.Intents.FLAGS.DIRECT_MESSAGES,
+    Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+    Discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING,
   ]
 });
 const { v4 } = require('uuid');
