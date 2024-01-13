@@ -54,11 +54,12 @@ client.on('threadCreate',
    * @param {Discord.ThreadChannel} thread 
    */
   async (thread) => {
-    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- ${thread.parentId} -- ${REMOVE_TR_CHANNEL_ID} -- ${String(thread.parentId)} -- ${String(REMOVE_TR_CHANNEL_ID)} -- ${thread.parentId.toString()} -- ${REMOVE_TR_CHANNEL_ID.toString()}`);
+    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- |${thread.parentId}| -- |${REMOVE_TR_CHANNEL_ID}| -- ${String(thread.parentId)} -- ${String(REMOVE_TR_CHANNEL_ID)} -- ${thread.parentId.toString()} -- ${REMOVE_TR_CHANNEL_ID.toString()}`);
     console.log(`thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID): ${thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID)}`);
     console.log(typeof thread.parentId);
     console.log(typeof REMOVE_TR_CHANNEL_ID);
     console.log(thread.parentId);
+    console.log(REMOVE_TR_CHANNEL_ID);
     if (thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID)) {
       console.log('1');
       const threadMsg = await thread.fetchStarterMessage();
