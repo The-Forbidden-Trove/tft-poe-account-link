@@ -1,4 +1,4 @@
-FROM node:16.15
+FROM node:18.19.0
 RUN mkdir /tftpoelinkserver
 WORKDIR /tftpoelinkserver
 COPY package.json yarn.lock .
