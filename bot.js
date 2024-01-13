@@ -60,7 +60,7 @@ client.on('threadCreate',
     console.log(typeof REMOVE_TR_CHANNEL_ID);
     console.log(thread.parentId);
     console.log(REMOVE_TR_CHANNEL_ID);
-    if (thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID)) {
+    if (thread.parentId.trim() == REMOVE_TR_CHANNEL_ID.trim()) {
       console.log('1');
       const threadMsg = await thread.fetchStarterMessage();
       console.log('2');
