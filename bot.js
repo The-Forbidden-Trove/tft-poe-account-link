@@ -54,8 +54,8 @@ client.on('threadCreate',
    * @param {Discord.ThreadChannel} thread 
    */
   async (thread) => {
-    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- ${thread.parentId} -- ${REMOVE_TR_CHANNEL_ID}`)
-    if (String(thread.parentId) == String(REMOVE_TR_CHANNEL_ID)) {
+    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- ${thread.parentId} -- ${REMOVE_TR_CHANNEL_ID} -- ${String(thread.parentId)} --  ${String(REMOVE_TR_CHANNEL_ID)} -- ${thread.parentId.toString()} -- ${REMOVE_TR_CHANNEL_ID.toString()}`)
+    if (thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID)) {
       console.log('1')
       // const dynoMsg = thread.lastMessage;
       // console.log('2')
