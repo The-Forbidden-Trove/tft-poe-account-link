@@ -3,7 +3,15 @@ const client = new Discord.Client({
   presence: {
     activityName: 'DM me to verify',
     activityType: 'PLAYING'
-  }
+  },
+  intents: [
+    Discord.Intents.FLAGS.GUILDS,
+    Discord.Intents.FLAGS.GUILD_PRESENCES,
+    Discord.Intents.FLAGS.GUILD_MEMBERS,
+    Discord.Intents.FLAGS.MESSAGE_CONTENT,
+    Discord.Intents.FLAGS.GUILD_MESSAGES,
+    Discord.Intents.FLAGS.DIRECT_MESSAGES,
+  ]
 });
 const { v4 } = require('uuid');
 const {
@@ -21,6 +29,7 @@ const {
 const dotenv = require('dotenv');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
+const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId;
 const MODMAIL_CATEGORY = '834148931213852743';
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
@@ -37,7 +46,29 @@ client.on('ready', () => {
     .catch((err) => console.log(`ERROR SETTING ACTIVITY: ${err}`));
 });
 
-client.on('message', async (message) => {
+client.on('threadCreate',
+  /**
+   * 
+   * @param {Discord.ThreadChannel} thread 
+   */
+  async (thread) => {
+    if (thread.parentId === REMOVE_TR_CHANNEL_ID) {
+      const dynoMsg = thread.lastMessage;
+      if (!dynoMsg) {
+        console.log(`No dyno message found in thread ${thread.id}`);
+        return;
+      }
+      const dynoMsgContent = dynoMsg.embeds[0];
+      if (!dynoMsgContent) {
+        console.log(`No dyno message content found in thread ${thread.id}`);
+        return;
+      }
+      console.log(`dynoMsgContent: ${JSON.stringify(dynoMsgContent)}\n dynoMsgContent.fields: ${JSON.stringify(dynoMsgContent.fields)}\n dynomsgfooter: ${dynoMsgContent.footer.text}\n description: ${dynoMsgContent.description}`);
+    }
+  }
+);
+
+client.on('messageCreate', async (message) => {
   // is private message
   if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
     const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);

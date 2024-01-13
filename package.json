@@ -6,7 +6,7 @@
   "dependencies": {
     "abort-controller": "^3.0.0",
     "csv-parse": "^4.16.0",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.3.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
@@ -32,6 +32,7 @@
     "eslint": "^7.30.0",
     "eslint-plugin-jest": "^24.3.6",
     "jest": "^27.0.4",
-    "msw": "^0.39.2"
+    "msw": "^0.39.2",
+    "typescript": "^5.3.3"
   }
 }
