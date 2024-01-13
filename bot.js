@@ -54,19 +54,25 @@ client.on('threadCreate',
    * @param {Discord.ThreadChannel} thread 
    */
   async (thread) => {
-    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- ${thread.parentId} -- ${thread.partial}`)
+    console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- ${thread.parentId} -- ${REMOVE_TR_CHANNEL_ID}`)
     if (thread.parentId === REMOVE_TR_CHANNEL_ID) {
-      const dynoMsg = thread.lastMessage;
-      if (!dynoMsg) {
-        console.log(`No dyno message found in thread ${thread.id}`);
-        return;
-      }
-      const dynoMsgContent = dynoMsg.embeds[0];
-      if (!dynoMsgContent) {
-        console.log(`No dyno message content found in thread ${thread.id}`);
-        return;
-      }
-      console.log(`dynoMsgContent: ${JSON.stringify(dynoMsgContent)}\n dynoMsgContent.fields: ${JSON.stringify(dynoMsgContent.fields)}\n dynomsgfooter: ${dynoMsgContent.footer.text}\n description: ${dynoMsgContent.description}`);
+      console.log('1')
+      // const dynoMsg = thread.lastMessage;
+      // console.log('2')
+      // if (!dynoMsg) {
+      //   console.log(`No dyno message found in thread ${thread.id}`);
+      //   return;
+      // }
+      // console.log('3')
+      // const dynoMsgContent = dynoMsg.embeds[0];
+      // console.log('4')
+      // if (!dynoMsgContent) {
+      //   console.log(`No dyno message content found in thread ${thread.id}`);
+      //   return;
+      // }
+      const threadMsg = await thread.fetchStarterMessage();
+      console.log('2');
+      console.log(`dynoMsgContent: ${JSON.stringify(threadMsg.content)}\n dynoMsgContent.fields: ${JSON.stringify(threadMsg.embeds[0].fields)}\n dynomsgfooter: ${threadMsg.embeds[0].footer.text}\n description: ${threadMsg.embeds[0].description}`);
     }
   }
 );
