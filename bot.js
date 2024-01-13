@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client({
+  partials: ['CHANNEL'],
   presence: {
     activityName: 'DM me to verify',
     activityType: 'PLAYING'
