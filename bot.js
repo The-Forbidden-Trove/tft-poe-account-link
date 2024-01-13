@@ -42,8 +42,7 @@ if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity('DM me to verify')
-    .then(presence => console.log(`Activity set to ${JSON.stringify(presence)}`))
-    .catch((err) => console.log(`ERROR SETTING ACTIVITY: ${err}`));
+  console.log(`Activity set to ${JSON.stringify(client.user.presence.activities)}`)
 });
 
 client.on('threadCreate',
