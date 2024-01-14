@@ -108,10 +108,12 @@ client.on('threadCreate',
         await thread.send(`\`!blacklist check ${chars.join(' ')}\`\n`);
         await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n`)
         await thread.send(`If everything looks fine, please use the command \`?trapprove ${userId}\` to approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n`);
-        await thread.send(`If you want to reject the user, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.`);
+        await thread.send(`If you want to reject the user due to a badly filled out form, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
+        await thread.send(`If you want to reject the user due to a correct form, but they are too new, please use the command \`?trunmetreq ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.`);
         return
       } else {
         await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
+        await thread.send(`To reject the user due to not being linked yet, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
       }
       return;
     }
@@ -159,7 +161,7 @@ client.on('messageCreate', async (message) => {
       const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
       const poeUuid = await getPoeUuidByDiscordId(userId);
       if (poeAccount !== false && poeAccount > "") {
-        await message.channel.send(`The POE account linked to discord id ${userId} (< @${userId}>) is ${poeAccount} [${poeUuid}]`);
+        await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
         await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}`)
         return
       }
