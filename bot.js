@@ -30,6 +30,7 @@ const {
   getPoeUuidByDiscordId
 } = require('./database');
 const dotenv = require('dotenv');
+const nfetch = require('node-fetch');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
 const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId.trim();
@@ -77,11 +78,39 @@ client.on('threadCreate',
       const poeUuid = await getPoeUuidByDiscordId(userId);
       console.log(`poeUuid: ${poeUuid}`);
       if (poeAccount !== false && poeAccount > "") {
-        await thread.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
-        await thread.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}/characters`)
+        const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Host': 'www.pathofexile.com',
+            'User-Agent': 'TftPoeLinkerCheck / 2.0'
+          }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
+        const charsJson = await charsResp.json();
+        const chars = charsJson.map((char) => char.name);
+
+        const challengesResp = await nfetch(`https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Host': 'www.pathofexile.com',
+            'User-Agent': 'TftPoeLinkerCheck / 2.0'
+          }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
+        const challengesHtml = await challengesResp.text();
+        const challengesCompleted = challengesHtml.replace(/[\s\S]*Challenges completed/, 'Challenges completed').replace(/of 40[\s\S]*/, 'of 40');
+        //Challenges completed
+        const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]\n
+          POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}/characters\n
+          Characters: ${chars.join(', ')}
+          ${challengesCompleted}
+            `;
+        await thread.send(verificationInfo);
+        await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
+        await thread.send(`!blacklist check ${chars.join(' ')}`);
         return
       } else {
-        await thread.send(`No POE account found for discord id ${userId}`);
+        await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
       }
       return;
     }
@@ -102,7 +131,7 @@ client.on('messageCreate', async (message) => {
     const generatedState = v4();
     await createStateDiscordIdLink(generatedState, message.author.id);
     await message.author.dmChannel.send(
-      `Click here to authorize with the GGG oauth servers: ${buildAuthorizeURL(generatedState)}`
+      `Click here to authorize with the GGG oauth servers: ${buildAuthorizeURL(generatedState)} `
     );
   }
 
@@ -121,7 +150,7 @@ client.on('messageCreate', async (message) => {
         }
         const unlink = await unlinkDiscordID(userId);
         console.log(unlink);
-        await botControl.send(`Discord account with id ${userId} was successfully unlinked (from within a modmail).`);
+        await botControl.send(`Discord account with id ${userId} was successfully unlinked(from within a modmail).`);
         await message.channel.send(`Discord account with id ${userId} was successfully unlinked.`);
         return;
       }
@@ -130,7 +159,7 @@ client.on('messageCreate', async (message) => {
       const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
       const poeUuid = await getPoeUuidByDiscordId(userId);
       if (poeAccount !== false && poeAccount > "") {
-        await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
+        await message.channel.send(`The POE account linked to discord id ${userId} (< @${userId}>) is ${poeAccount} [${poeUuid}]`);
         await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}`)
         return
       }

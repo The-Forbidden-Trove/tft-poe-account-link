@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: tftpoelinkbot
-          image: 'harbor.teamfrag.net/private/tftpoelinkbot/tftpoelinkbot:latest'
+          image: "harbor.teamfrag.net/private/tftpoelinkbot/tftpoelinkbot:latest"
           ports:
             - containerPort: 80
               protocol: TCP
@@ -34,6 +34,11 @@ spec:
                 secretKeyRef:
                   name: tftpoelink-secrets
                   key: botControlId
+            - name: removeTrChannelId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: removeTrChannelId
             - name: chkDiscCmd
               valueFrom:
                 secretKeyRef:
