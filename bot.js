@@ -32,7 +32,7 @@ const {
 const dotenv = require('dotenv');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
-const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId;
+const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId.trim();
 const MODMAIL_CATEGORY = '834148931213852743';
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
@@ -60,7 +60,7 @@ client.on('threadCreate',
     console.log(typeof REMOVE_TR_CHANNEL_ID);
     console.log(thread.parentId);
     console.log(REMOVE_TR_CHANNEL_ID);
-    if (thread.parentId.trim() == REMOVE_TR_CHANNEL_ID.trim()) {
+    if (thread.parentId == REMOVE_TR_CHANNEL_ID) {
       console.log('1');
       const threadMsg = await thread.fetchStarterMessage();
       console.log('2');
