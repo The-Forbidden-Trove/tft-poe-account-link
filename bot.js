@@ -65,6 +65,20 @@ client.on('threadCreate',
       const threadMsg = await thread.fetchStarterMessage();
       console.log('2');
       console.log(`dynoMsgContent: ${JSON.stringify(threadMsg.content)}\n dynoMsgContent.fields: ${JSON.stringify(threadMsg.embeds[0].fields)}\n dynomsgfooter: ${threadMsg.embeds[0].footer.text}\n description: ${threadMsg.embeds[0].description}`);
+      const footer = threadMsg?.embeds?.[0]?.footer?.text;
+      if (!footer) {
+        console.log(`no footer found, embeds?: ${threadMsg?.embeds?.length} -- ${JSON.stringify(threadMsg?.embeds?.[0]?.fields || '')}`);
+      }
+      const userId = footer.replace('User ID: ', '').trim();
+
+      const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
+      const poeUuid = await getPoeUuidByDiscordId(userId);
+      if (poeAccount !== false && poeAccount > "") {
+        await thread.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
+        await thread.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}/characters`)
+        return
+      }
+
       return;
     }
     console.log('end');
