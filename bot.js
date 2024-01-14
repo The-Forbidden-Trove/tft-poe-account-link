@@ -100,21 +100,21 @@ client.on('threadCreate',
         const challengesHtml = await challengesResp.text();
         const challengesCompleted = challengesHtml.replace(/[\s\S]*Challenges completed/, 'Challenges completed').replace(/of 40[\s\S]*/, 'of 40');
         //Challenges completed
-        const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]\n
-          POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}/characters\n
-          Characters: ${chars.join(', ')}
-          ${challengesCompleted}
-            `;
+        const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]\n\n`
+          + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordId=${userId}&uuid=${poeUuid}\n\n`
+          + `${challengesCompleted}\n`;
         await thread.send(verificationInfo);
         await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
-        await thread.send(`!blacklist check ${chars.join(' ')}`);
+        await thread.send(`\`!blacklist check ${chars.join(' ')}\`\n`);
+        await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n`)
+        await thread.send(`If everything looks fine, please use the command \`?trapprove ${userId}\` to approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n`);
+        await thread.send(`If you want to reject the user, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.`);
         return
       } else {
         await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
       }
       return;
     }
-    console.log('end');
     return;
   }
 );
@@ -224,6 +224,14 @@ client.on('messageCreate', async (message) => {
         await message.channel.send(`No discord id found for POE account ${splitContent[1]}`);
         return;
       }
+    }
+  }
+  if (message.channel.type === 'GUILD_PRIVATE_THREAD' && message.channel.parentId == REMOVE_TR_CHANNEL_ID && message.channel.name.includes('Remove trade restriction')) {
+    const lowerCaseContent = message.content.toLowerCase().trim();
+    if (lowerCaseContent === '#closetr') {
+      const startingThreadMsg = await message.channel.fetchStarterMessage();
+      await message.channel.delete();
+      await startingThreadMsg.delete();
     }
   }
 });
