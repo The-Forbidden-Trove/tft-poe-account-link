@@ -1,6 +1,7 @@
 const nodeFetch = require('node-fetch');
 const { linkTftPoeAccounts, addBlacklistedUserAttempt, addBannedPoeUserAttempt } = require('./database');
 const { checkBannedAccount } = require('./checker');
+const { client, assignTftVerifiedRole } = require('./bot');
 
 const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discordId, blacklist) => {
     const jsonResp = await tokenResp.json();
@@ -67,7 +68,8 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         }
 
 
-        await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
+        // await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
+        await assignTftVerifiedRole(discordId);
         pendingResponse.sendFile(__dirname + '/linked.html');
         return true;
     }, (rejectProfileReason) => {

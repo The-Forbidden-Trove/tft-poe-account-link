@@ -334,3 +334,8 @@ const buildAuthorizeURL = (state) => {
   const queryParamStr = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
   return `https://www.pathofexile.com/oauth/authorize?${queryParamStr}`;
 }
+
+module.exports = {
+  client,
+  assignTftVerifiedRole,
+}
