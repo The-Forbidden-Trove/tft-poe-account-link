@@ -20,7 +20,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
             }
         }
         if (!success) {
-            pendingResponse.redirect('https://dyno.gg/form/e6fe79a8');
+            pendingResponse.sendFile(__dirname + '/error.html');
         }
         return success;
     }
@@ -45,9 +45,11 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         const poeAccName = profileRespJson.name;
         const poeAccRealm = profileRespJson.realm;
         const poeAccUUID = profileRespJson.uuid;
+        //const poeCharName = await callCharactersApi(accessToken);
+        //console.log(poeCharName);
 
         if (poeAccRealm != "pc") {
-            pendingResponse.redirect('https://dyno.gg/form/e6fe79a8');
+            pendingResponse.sendFile(__dirname + '/error.html');
             return false;
         }
 
@@ -68,7 +70,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
 
         // await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
         await assignTftVerifiedRole(discordId);
-        pendingResponse.redirect('https://dyno.gg/form/ea4bf8e5');
+        pendingResponse.sendFile(__dirname + '/linked.html');
         return true;
     }, (rejectProfileReason) => {
         console.log(`rejectProfileReason: ${JSON.stringify(rejectProfileReason)}`)
