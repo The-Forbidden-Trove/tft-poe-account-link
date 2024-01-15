@@ -96,7 +96,7 @@ if (process.env.RUN_TYPE !== 'server') {
             + `${challengesCompleted}\n`;
           await thread.send(verificationInfo);
           await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
-          await thread.send(`\`!blacklist check ${chars.join(', ')}\`\n`);
+          await thread.send(`\`\`\`!blacklist check ${chars.join(', ')}\`\`\`\n`);
           await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
           await thread.send(`If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
           await thread.send(`If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
