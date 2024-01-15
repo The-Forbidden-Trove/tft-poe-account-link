@@ -240,9 +240,24 @@ client.on('messageCreate', async (message) => {
 
 client.login(process.env.botToken);
 
+let longest = [];
+
 setInterval(async () => {
+  const start = process.hrtime.bigint();
   const discordIds = await getAllUnassignedLinkedUserIds();
   await Promise.all(discordIds.map((id) => assignRoleThenUpdateUser(id)));
+  const end = process.hrtime.bigint();
+  const timeTaken = `${(end - start) / BigInt(1000000)}`;
+  console.log(`assignRoleThenUpdateUser took ${timeTaken}ms`);
+  if (longest.length < 10) {
+    longest.push(timeTaken);
+  } else {
+    if (timeTaken > longest[longest.length - 1]) {
+      longest[longest.length - 1] = timeTaken;
+    }
+  }
+  longest = longest.sort((a, b) => b - a);
+  console.log(`longest: ${JSON.stringify(longest)}`);
 }, 30000);
 
 setInterval(async () => {
