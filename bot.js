@@ -336,6 +336,5 @@ const buildAuthorizeURL = (state) => {
 }
 
 module.exports = {
-  client,
   assignTftVerifiedRole,
 }

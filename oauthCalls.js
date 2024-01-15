@@ -1,7 +1,7 @@
 const nodeFetch = require('node-fetch');
-const { linkTftPoeAccounts, addBlacklistedUserAttempt, addBannedPoeUserAttempt } = require('./database');
+const { addBlacklistedUserAttempt, addBannedPoeUserAttempt } = require('./database');
 const { checkBannedAccount } = require('./checker');
-const { client, assignTftVerifiedRole } = require('./bot');
+const { assignTftVerifiedRole } = require('./bot');
 
 const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discordId, blacklist) => {
     const jsonResp = await tokenResp.json();
