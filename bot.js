@@ -77,8 +77,11 @@ if (process.env.RUN_TYPE !== 'server') {
             }
           });
           await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
-          const charsJson = await charsResp.json();
-          const chars = charsJson.map((char) => char.name);
+          const charsJson = await charsResp.json().catch((e) => {
+            console.log(e);
+            return '';
+          });
+          const chars = charsJson !== '' ? charsJson.map((char) => char.name) : 'No chars found - maybe private?';
 
           const challengesResp = await nfetch(`https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges`, {
             headers: {
@@ -96,7 +99,11 @@ if (process.env.RUN_TYPE !== 'server') {
             + `${challengesCompleted}\n`;
           await thread.send(verificationInfo);
           await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
-          await thread.send(`\`\`\`!blacklist check ${chars.join(', ')}\`\`\`\n`);
+          if (charsJson !== '') {
+            await thread.send(`\`\`\`!blacklist check ${chars.join(', ')}\`\`\`\n`);
+          } else {
+            await thread.send(chars);
+          }
           await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
           await thread.send(`If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
           await thread.send(`If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
@@ -221,9 +228,7 @@ if (process.env.RUN_TYPE !== 'server') {
       }
     }
     if (message.channel.parentId == REMOVE_TR_CHANNEL_ID) {
-      console.log('1')
       const lowerCaseContent = message.content.toLowerCase().trim();
-      console.log(`lowerCaseContent: ${lowerCaseContent}`);
       if (lowerCaseContent === '#closetr') {
         const startingThreadMsg = await message.channel.fetchStarterMessage();
         await message.channel.delete();
