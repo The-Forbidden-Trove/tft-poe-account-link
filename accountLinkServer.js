@@ -1,7 +1,6 @@
 const express = require('express');
 const nodeFetch = require('node-fetch');
 const dotenv = require('dotenv');
-const Discord = require('discord.js');
 const { getDiscordIdStateLink } = require('./database');
 const { callProfileApiWithRetryBackoff } = require('./oauthCalls');
 const { getBlacklistedAccountNames } = require('./blacklist');
@@ -20,21 +19,6 @@ let blacklist;
 console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 
 let API_TIMEOUT_ENABLED = false;
-
-let giveLinkRoleClient;
-if (process.env.RUN_TYPE === 'server' && giveLinkRoleClient === undefined) {
-  giveLinkRoleClient = new Discord.Client({
-    intents: [
-      Discord.Intents.FLAGS.GUILDS,
-      Discord.Intents.FLAGS.GUILD_MEMBERS,
-    ]
-  });
-  giveLinkRoleClient.login(process.env.giveLinkRole.trim());
-}
-
-const getLinkRoleClient = () => {
-  return giveLinkRoleClient;
-}
 
 const enableTemporaryTimeout = (retryAfter) => {
   API_TIMEOUT_ENABLED = true;
@@ -99,5 +83,4 @@ setInterval(async () => {
 
 module.exports = {
   callProfileApiWithRetryBackoff,
-  getLinkRoleClient
 }

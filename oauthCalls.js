@@ -1,16 +1,25 @@
 const nodeFetch = require('node-fetch');
+const Discord = require('discord.js');
 const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkByDiscordId } = require('./database');
 const { checkBannedAccount } = require('./checker');
-const { getLinkRoleClient } = require('./accountLinkServer');
 
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
 const MODMAIL_CATEGORY = '834148931213852743';
 
+let giveLinkRoleClient;
+if (process.env.RUN_TYPE === 'server' && giveLinkRoleClient === undefined) {
+    giveLinkRoleClient = new Discord.Client({
+        intents: [
+            Discord.Intents.FLAGS.GUILDS,
+            Discord.Intents.FLAGS.GUILD_MEMBERS,
+        ]
+    });
+    giveLinkRoleClient.login(process.env.giveLinkRole.trim());
+}
 
 const assignTftVerifiedRole = async (discordUserId) => {
-    const client = getLinkRoleClient();
-    const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
+    const guild = await giveLinkRoleClient.guilds.fetch(TFT_SERVER_ID, true);
     console.log(`assignTftVerifiedRole to:  ${discordUserId}`);
     let guildMember;
     try {
@@ -27,8 +36,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
 }
 
 const notifyModmailLink = async (discordUserId) => {
-    const client = getLinkRoleClient();
-    const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
+    const guild = await giveLinkRoleClient.guilds.fetch(TFT_SERVER_ID, true);
     const category = guild.channels.cache.get(MODMAIL_CATEGORY);
     let regex = new RegExp(discordUserId);
     let userChannel = category.children.filter(channel => regex.test(channel.topic));
