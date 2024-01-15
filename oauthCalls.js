@@ -1,6 +1,6 @@
 const nodeFetch = require('node-fetch');
 const Discord = require('discord.js');
-const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkByDiscordId } = require('./database');
+const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkByDiscordId, linkTftPoeAccounts } = require('./database');
 const { checkBannedAccount } = require('./checker');
 
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
@@ -124,7 +124,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         }
 
 
-        // await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
+        await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
         await assignTftVerifiedRole(discordId);
         pendingResponse.sendFile(__dirname + '/linked.html');
         return true;
