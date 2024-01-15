@@ -25,8 +25,6 @@ const {
   createStateDiscordIdLink,
   getPoeTftStateLinkByDiscordId,
   getPoeTftStateLinkByPoeAccount,
-  getAllUnassignedLinkedUserIds,
-  updateUnassignedLinkedUser,
   getBlacklistedUserAttempts,
   unlinkDiscordID,
   getBannedPoeUserAttempts,
