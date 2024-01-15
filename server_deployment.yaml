@@ -17,11 +17,21 @@ spec:
     spec:
       containers:
         - name: tftpoelinkserver
-          image: 'harbor.teamfrag.net/private/tftpoelinkserver/tftpoelinkserver:latest'
+          image: "harbor.teamfrag.net/private/tftpoelinkserver/tftpoelinkserver:latest"
           ports:
             - containerPort: 4050
               protocol: TCP
           env:
+            - name: giveLinkRole
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: giveLinkRole
+            - name: removeTrChannelId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: removeTrChannelId
             - name: dbPassword
               valueFrom:
                 secretKeyRef:

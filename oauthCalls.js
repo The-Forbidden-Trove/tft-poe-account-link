@@ -1,7 +1,55 @@
 const nodeFetch = require('node-fetch');
-const { addBlacklistedUserAttempt, addBannedPoeUserAttempt } = require('./database');
+const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkByDiscordId } = require('./database');
 const { checkBannedAccount } = require('./checker');
-const { assignTftVerifiedRole } = require('./bot');
+const { getLinkRoleClient } = require('./accountLinkServer');
+
+const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
+const TFT_SERVER_ID = '645607528297922560';
+const MODMAIL_CATEGORY = '834148931213852743';
+
+
+const assignTftVerifiedRole = async (discordUserId) => {
+    const client = getLinkRoleClient();
+    const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
+    console.log(`assignTftVerifiedRole to:  ${discordUserId}`);
+    let guildMember;
+    try {
+        guildMember = await guild.members.fetch({ user: String(discordUserId), cache: false });
+    } catch (e) {
+        console.log(e.stack);
+        console.log(e.message);
+        return Promise.resolve(new Error('user does not exist'));
+    }
+    if (guildMember) {
+        await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
+        await notifyModmailLink(discordUserId);
+    }
+}
+
+const notifyModmailLink = async (discordUserId) => {
+    const client = getLinkRoleClient();
+    const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
+    const category = guild.channels.cache.get(MODMAIL_CATEGORY);
+    let regex = new RegExp(discordUserId);
+    let userChannel = category.children.filter(channel => regex.test(channel.topic));
+    const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
+    const infoEmbed = {
+        "title": `ℹ️ User Linked ℹ️`,
+        "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
+        "color": 0xff448e
+    }
+    try {
+        for (const channel of userChannel) {
+            try {
+                await channel.send({ embeds: [infoEmbed] });
+            } catch (e) {
+                console.error(`Error sending message to channel ${channel.id}: ${e.message}`);
+            }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discordId, blacklist) => {
     const jsonResp = await tokenResp.json();

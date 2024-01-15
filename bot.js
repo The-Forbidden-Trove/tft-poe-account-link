@@ -37,9 +37,9 @@ const nfetch = require('node-fetch');
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
 const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId.trim();
 const MODMAIL_CATEGORY = '834148931213852743';
+const MOD_ALERT_CHANNEL_ID = process.env.modAlertChannelId;
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
-const MOD_ALERT_CHANNEL_ID = process.env.modAlertChannelId;
 
 if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
   dotenv.config({ path: __dirname + '/.env_dev' });
@@ -51,7 +51,6 @@ if (process.env.RUN_TYPE !== 'server') {
     client.user.setActivity('DM me to verify')
     console.log(`Activity set to ${JSON.stringify(client.user.presence.activities)}`)
   });
-
 
   client.on('threadCreate',
     /**
@@ -127,13 +126,13 @@ if (process.env.RUN_TYPE !== 'server') {
 
   client.on('messageCreate', async (message) => {
     // is private message
-  if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
-    const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
-    if (isLinked) {
-      await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
-      await assignTftVerifiedRole(message.author.id);
-      return;
-    }
+    if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
+      const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
+      if (isLinked) {
+        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
+        await assignTftVerifiedRole(message.author.id);
+        return;
+      }
       const generatedState = v4();
       await createStateDiscordIdLink(generatedState, message.author.id);
       await message.author.dmChannel.send(
@@ -263,9 +262,6 @@ if (process.env.RUN_TYPE !== 'server') {
   }, 60000);
 }
 
-
-
-
 const assignTftVerifiedRole = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
   console.log(`assignTftVerifiedRole to:  ${discordUserId}`);
@@ -282,7 +278,6 @@ const assignTftVerifiedRole = async (discordUserId) => {
     await notifyModmailLink(discordUserId);
   }
 }
-
 const notifyModmailLink = async (discordUserId) => {
   const guild = await client.guilds.fetch(TFT_SERVER_ID, true);
   const category = guild.channels.cache.get(MODMAIL_CATEGORY);
@@ -319,8 +314,4 @@ const buildAuthorizeURL = (state) => {
 
   const queryParamStr = Object.entries(params).map(([key, val]) => `${key}=${val}`).join('&');
   return `https://www.pathofexile.com/oauth/authorize?${queryParamStr}`;
-}
-
-module.exports = {
-  assignTftVerifiedRole,
 }
