@@ -58,28 +58,16 @@ if (process.env.RUN_TYPE !== 'server') {
      * @param {Discord.ThreadChannel} thread 
      */
     async (thread) => {
-      console.log(`new thread: ${thread.id} -- ${thread.createdTimestamp} -- |${thread.parentId}| -- |${REMOVE_TR_CHANNEL_ID}| -- ${String(thread.parentId)} -- ${String(REMOVE_TR_CHANNEL_ID)} -- ${thread.parentId.toString()} -- ${REMOVE_TR_CHANNEL_ID.toString()}`);
-      console.log(`thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID): ${thread.parentId.toString() == String(REMOVE_TR_CHANNEL_ID)}`);
-      console.log(typeof thread.parentId);
-      console.log(typeof REMOVE_TR_CHANNEL_ID);
-      console.log(thread.parentId);
-      console.log(REMOVE_TR_CHANNEL_ID);
       if (thread.parentId == REMOVE_TR_CHANNEL_ID) {
-        console.log('1');
         const threadMsg = await thread.fetchStarterMessage();
-        console.log('2');
-        console.log(`dynoMsgContent: ${JSON.stringify(threadMsg.content)}\n dynoMsgContent.fields: ${JSON.stringify(threadMsg.embeds[0].fields)}\n dynomsgfooter: ${threadMsg.embeds[0].footer.text}\n description: ${threadMsg.embeds[0].description}`);
         const footer = threadMsg?.embeds?.[0]?.footer?.text;
         if (!footer) {
           console.log(`no footer found, embeds?: ${threadMsg?.embeds?.length} -- ${JSON.stringify(threadMsg?.embeds?.[0]?.fields || '')}`);
         }
         const userId = footer.replace('User ID: ', '').trim();
-        console.log(`userId: ${userId}`);
-
         const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
-        console.log(`poeAccount: ${poeAccount}`);
         const poeUuid = await getPoeUuidByDiscordId(userId);
-        console.log(`poeUuid: ${poeUuid}`);
+
         if (poeAccount !== false && poeAccount > "") {
           const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
             headers: {
@@ -113,6 +101,7 @@ if (process.env.RUN_TYPE !== 'server') {
           await thread.send(`If everything looks fine, please use the command \`?trapprove ${userId}\` to approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n`);
           await thread.send(`If you want to reject the user due to a badly filled out form, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
           await thread.send(`If you want to reject the user due to a correct form, but they are too new, please use the command \`?trunmetreq ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.`);
+          await thread.send(`If you need the user to send more info or it's a more advanced case, please use the command \`?trmm\` to send a DM to them via dyno that they should open a modmail, then use the command \`#closetr\` to remove this thread.\n`);
           return
         } else {
           await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
@@ -129,7 +118,7 @@ if (process.env.RUN_TYPE !== 'server') {
     if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
       const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
       if (isLinked) {
-        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, you need to send a message to <@825395083184439316> to get verified!');
+        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, please fill out this form https://dyno.gg/form/ea4bf8e5 and the team will be in touch.');
         await assignTftVerifiedRole(message.author.id);
         return;
       }
