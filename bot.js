@@ -52,6 +52,65 @@ if (process.env.RUN_TYPE !== 'server') {
     console.log(`Activity set to ${JSON.stringify(client.user.presence.activities)}`)
   });
 
+  const postVerificationStuff = async (thread) => {
+    const threadMsg = await thread.fetchStarterMessage();
+    const footer = threadMsg?.embeds?.[0]?.footer?.text;
+    if (!footer) {
+      console.log(`no footer found, embeds?: ${threadMsg?.embeds?.length} -- ${JSON.stringify(threadMsg?.embeds?.[0]?.fields || '')}`);
+    }
+    const userId = footer.replace('User ID: ', '').trim();
+    const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
+    const poeUuid = await getPoeUuidByDiscordId(userId);
+
+    if (poeAccount !== false && poeAccount > "") {
+      const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Host': 'www.pathofexile.com',
+          'User-Agent': 'TftPoeLinkerCheck / 2.0'
+        }
+      });
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
+      const charsJson = await charsResp.json().catch((e) => {
+        console.log(e);
+        return '';
+      });
+      const chars = charsJson !== '' ? charsJson.map((char) => char.name) : 'No chars found - maybe private?';
+
+      const challengesResp = await nfetch(`https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Host': 'www.pathofexile.com',
+          'User-Agent': 'TftPoeLinkerCheck / 2.0'
+        }
+      });
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
+      const challengesHtml = await challengesResp.text();
+      const challengesCompleted = challengesHtml.replace(/[\s\S]*Challenges completed/, 'Challenges completed').replace(/of 40[\s\S]*/, 'of 40');
+      //Challenges completed
+      const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]\n\n`
+        + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}\n\n`
+        + `${challengesCompleted}\n`;
+      await thread.send(verificationInfo);
+      await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
+      if (charsJson !== '') {
+        await thread.send(`\`\`\`!blacklist check ${chars.join(', ')}\`\`\`\n`);
+      } else {
+        await thread.send(chars);
+      }
+      await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
+      await thread.send(`If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
+      await thread.send(`If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
+      await thread.send(`If you want to reject the user due to a correct form, but they are too new, please use the command\n \`?trunmetreq ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
+      await thread.send(`If you need the user to send more info or it's a more advanced case, please use the command\n \`?trmm\` \nto send a DM to them via dyno that they should open a modmail, then use the command \`#closetr\` to remove this thread.`);
+      return
+    } else {
+      await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
+      await thread.send(`To reject the user due to not being linked yet, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
+    }
+    return;
+  }
+
   client.on('threadCreate',
     /**
      * 
@@ -59,62 +118,7 @@ if (process.env.RUN_TYPE !== 'server') {
      */
     async (thread) => {
       if (thread.parentId == REMOVE_TR_CHANNEL_ID) {
-        const threadMsg = await thread.fetchStarterMessage();
-        const footer = threadMsg?.embeds?.[0]?.footer?.text;
-        if (!footer) {
-          console.log(`no footer found, embeds?: ${threadMsg?.embeds?.length} -- ${JSON.stringify(threadMsg?.embeds?.[0]?.fields || '')}`);
-        }
-        const userId = footer.replace('User ID: ', '').trim();
-        const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
-        const poeUuid = await getPoeUuidByDiscordId(userId);
-
-        if (poeAccount !== false && poeAccount > "") {
-          const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Host': 'www.pathofexile.com',
-              'User-Agent': 'TftPoeLinkerCheck / 2.0'
-            }
-          });
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
-          const charsJson = await charsResp.json().catch((e) => {
-            console.log(e);
-            return '';
-          });
-          const chars = charsJson !== '' ? charsJson.map((char) => char.name) : 'No chars found - maybe private?';
-
-          const challengesResp = await nfetch(`https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Host': 'www.pathofexile.com',
-              'User-Agent': 'TftPoeLinkerCheck / 2.0'
-            }
-          });
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
-          const challengesHtml = await challengesResp.text();
-          const challengesCompleted = challengesHtml.replace(/[\s\S]*Challenges completed/, 'Challenges completed').replace(/of 40[\s\S]*/, 'of 40');
-          //Challenges completed
-          const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]\n\n`
-            + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}\n\n`
-            + `${challengesCompleted}\n`;
-          await thread.send(verificationInfo);
-          await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
-          if (charsJson !== '') {
-            await thread.send(`\`\`\`!blacklist check ${chars.join(', ')}\`\`\`\n`);
-          } else {
-            await thread.send(chars);
-          }
-          await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
-          await thread.send(`If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
-          await thread.send(`If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
-          await thread.send(`If you want to reject the user due to a correct form, but they are too new, please use the command\n \`?trunmetreq ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
-          await thread.send(`If you need the user to send more info or it's a more advanced case, please use the command\n \`?trmm\` \nto send a DM to them via dyno that they should open a modmail, then use the command \`#closetr\` to remove this thread.`);
-          return
-        } else {
-          await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
-          await thread.send(`To reject the user due to not being linked yet, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
-        }
-        return;
+        await postVerificationStuff(thread);
       }
       return;
     }
@@ -233,6 +237,9 @@ if (process.env.RUN_TYPE !== 'server') {
         const startingThreadMsg = await message.channel.fetchStarterMessage();
         await message.channel.delete();
         await startingThreadMsg.delete();
+      }
+      if (lowerCaseContent === '#resendInfo') {
+        await postVerificationStuff(message.channel);
       }
     }
   });
