@@ -232,7 +232,7 @@ if (process.env.RUN_TYPE !== 'server') {
         }
       }
     }
-    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID && message.channel.name.includes('Remove trade restriction')) {
+    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID) {
       console.log('1')
       const lowerCaseContent = message.content.toLowerCase().trim();
       console.log(`lowerCaseContent: ${lowerCaseContent}`);
