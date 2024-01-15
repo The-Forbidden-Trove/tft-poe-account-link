@@ -232,8 +232,10 @@ if (process.env.RUN_TYPE !== 'server') {
         }
       }
     }
-    if (message.channel.type === 'GUILD_PRIVATE_THREAD' && message.channel.parentId == REMOVE_TR_CHANNEL_ID && message.channel.name.includes('Remove trade restriction')) {
+    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID && message.channel.name.includes('Remove trade restriction')) {
+      console.log('1')
       const lowerCaseContent = message.content.toLowerCase().trim();
+      console.log(`lowerCaseContent: ${lowerCaseContent}`);
       if (lowerCaseContent === '#closetr') {
         const startingThreadMsg = await message.channel.fetchStarterMessage();
         await message.channel.delete();
