@@ -238,7 +238,7 @@ if (process.env.RUN_TYPE !== 'server') {
         await message.channel.delete();
         await startingThreadMsg.delete();
       }
-      if (lowerCaseContent === '#resendInfo') {
+      if (lowerCaseContent === '#resendinfo') {
         await postVerificationStuff(message.channel);
       }
     }
