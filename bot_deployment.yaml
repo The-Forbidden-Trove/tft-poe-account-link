@@ -24,6 +24,16 @@ spec:
             - containerPort: 8082
               protocol: TCP
           env:
+            - name: cantLinkChannelId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: cantLinkChannelId
+            - name: removeTrChannelId
+              valueFrom:
+                secretKeyRef:
+                  name: tftpoelink-secrets
+                  key: removeTrChannelId
             - name: modAlertChannelId
               valueFrom:
                 secretKeyRef:

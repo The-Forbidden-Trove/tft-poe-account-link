@@ -35,7 +35,8 @@ const dotenv = require('dotenv');
 const nfetch = require('node-fetch');
 
 const BOT_CONTROL_CHANNEL_ID = process.env.botControlId;
-const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId.trim();
+const REMOVE_TR_CHANNEL_ID = process.env.removeTrChannelId?.trim();
+const CANT_LINK_CHANNEL_ID = process.env.cantLinkChannelId?.trim();
 const MODMAIL_CATEGORY = '834148931213852743';
 const MOD_ALERT_CHANNEL_ID = process.env.modAlertChannelId;
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
@@ -232,14 +233,14 @@ if (process.env.RUN_TYPE !== 'server') {
         }
       }
     }
-    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID) {
+    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId == CANT_LINK_CHANNEL_ID) {
       const lowerCaseContent = message.content.toLowerCase().trim();
       if (lowerCaseContent === '#closetr') {
         const startingThreadMsg = await message.channel.fetchStarterMessage();
         await message.channel.delete();
         await startingThreadMsg.delete();
       }
-      if (lowerCaseContent === '#resendinfo') {
+      if (lowerCaseContent === '#resendinfo' && message.channel.parentId == REMOVE_TR_CHANNEL_ID) {
         await postVerificationStuff(message.channel);
       }
     }
