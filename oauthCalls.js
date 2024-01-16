@@ -1,5 +1,6 @@
 const nodeFetch = require('node-fetch');
 const Discord = require('discord.js');
+// eslint-disable-next-line no-unused-vars
 const express = require('express');
 const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkByDiscordId, linkTftPoeAccounts } = require('./database');
 const { checkBannedAccount } = require('./checker');
