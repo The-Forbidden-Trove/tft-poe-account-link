@@ -257,8 +257,7 @@ if (process.env.RUN_TYPE !== 'server') {
     console.log(`reaction message id: ${message.channel.id}-${message.channel.name} -- user: ${user.id}-${user.username}`);
     if (message.channel.id == REMOVE_TR_CHANNEL_ID || message.channel.id == CANT_LINK_CHANNEL_ID) {
       console.log('1 reaction');
-      const hasThread = message.hasThread();
-      if (!hasThread) {
+      if (!message.hasThread) {
         console.log('ohno');
         return;
       }
