@@ -250,6 +250,7 @@ if (process.env.RUN_TYPE !== 'server') {
   });
 
   client.on('messageReactionAdd', async (reaction, user) => {
+    console.log(`reaction message id: ${reaction.message.channel.id}-${reaction.message.channel.name} -- user: ${user.id}-${user.username}`);
     if (reaction.message.channel.id == REMOVE_TR_CHANNEL_ID || reaction.message.channel.id == CANT_LINK_CHANNEL_ID) {
       console.log('1 reaction');
       const hasThread = reaction.message.hasThread();
@@ -260,7 +261,7 @@ if (process.env.RUN_TYPE !== 'server') {
       console.log('2 reaction');
       await reaction.message.thread.send(`User <@${user.id}> is taking this case.`);
     }
-  })
+  });
 
   client.login(process.env.botToken);
 
