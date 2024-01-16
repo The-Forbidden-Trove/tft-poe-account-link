@@ -250,7 +250,7 @@ if (process.env.RUN_TYPE !== 'server') {
   });
 
   client.on('messageReactionAdd', async (reaction, user) => {
-    if (reaction.message.channel.parentId == REMOVE_TR_CHANNEL_ID || reaction.message.channel.parentId == CANT_LINK_CHANNEL_ID) {
+    if (reaction.message.channel.id == REMOVE_TR_CHANNEL_ID || reaction.message.channel.id == CANT_LINK_CHANNEL_ID) {
       console.log('1 reaction');
       const hasThread = reaction.message.hasThread();
       if (!hasThread) {
