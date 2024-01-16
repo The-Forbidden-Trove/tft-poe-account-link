@@ -1,4 +1,7 @@
 const Discord = require('discord.js');
+/**
+ * @type {Discord.Client}
+ */
 let client;
 
 if (process.env.RUN_TYPE !== 'server') {
@@ -245,6 +248,19 @@ if (process.env.RUN_TYPE !== 'server') {
       }
     }
   });
+
+  client.on('messageReactionAdd', async (reaction, user) => {
+    if (reaction.message.channel.parentId == REMOVE_TR_CHANNEL_ID || reaction.message.channel.parentId == CANT_LINK_CHANNEL_ID) {
+      console.log('1 reaction');
+      const hasThread = reaction.message.hasThread();
+      if (!hasThread) {
+        console.log('ohno');
+        return;
+      }
+      console.log('2 reaction');
+      await reaction.message.thread.send(`User <@${user.id}> is taking this case.`);
+    }
+  })
 
   client.login(process.env.botToken);
 
