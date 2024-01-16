@@ -159,7 +159,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
                 return true
             }
         }
-        pendingResponse.send('You have successfully linked your PoE account to TFT.\n Welcome to TFT! Please read ⁠<#667298412596559904>, ⁠<#669127045678104587> and <#805209481049800765>. \nAlso check out our blacklist tool which helps protect you from blacklisted users in game. You can find more info here https://discord.com/channels/645607528297922560/667298412596559904/869892738714333204 - enjoy your time trading on TFT!\n You can now close this tab.');
+        pendingResponse.send('You have successfully linked your PoE account to TFT.\n Welcome to TFT! Please read #server-info-and-tools, #server-rules and #server-faq. \nAlso check out our blacklist tool which helps protect you from blacklisted users in game. You can find more info here <a href="https://discord.com/channels/645607528297922560/667298412596559904/869892738714333204">https://discord.com/channels/645607528297922560/667298412596559904/869892738714333204</a> - enjoy your time trading on TFT!\n You can now close this tab.');
         return true;
     }, (rejectProfileReason) => {
         console.log(`rejectProfileReason: ${JSON.stringify(rejectProfileReason)}`)
