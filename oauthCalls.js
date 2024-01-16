@@ -1,5 +1,6 @@
 const nodeFetch = require('node-fetch');
 const Discord = require('discord.js');
+const express = require('express');
 const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkByDiscordId, linkTftPoeAccounts } = require('./database');
 const { checkBannedAccount } = require('./checker');
 
@@ -7,6 +8,9 @@ const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
 const TFT_SERVER_ID = '645607528297922560';
 const MODMAIL_CATEGORY = '834148931213852743';
 
+/**
+ * @type {Discord.Client}
+ */
 let giveLinkRoleClient;
 if (process.env.RUN_TYPE === 'server' && giveLinkRoleClient === undefined) {
     giveLinkRoleClient = new Discord.Client({
@@ -83,6 +87,14 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
     return false;
 }
 
+/**
+ * 
+ * @param {*} accessToken 
+ * @param {express.Response} pendingResponse 
+ * @param {*} discordId 
+ * @param {*} blacklist 
+ * @returns 
+ */
 const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist) => {
     const resp = await nodeFetch('https://www.pathofexile.com/api/profile', {
         headers: {
@@ -126,7 +138,27 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
 
         await linkTftPoeAccounts(discordId, poeAccName, poeAccUUID);
         await assignTftVerifiedRole(discordId);
-        pendingResponse.redirect('https://dyno.gg/form/ea4bf8e5');
+
+        const guild = await giveLinkRoleClient.guilds.fetch(TFT_SERVER_ID, true);
+        /**
+         * @type {Discord.GuildMember}
+         */
+        let guildMember;
+        try {
+            guildMember = await guild.members.fetch({ user: String(discordId), cache: false });
+        } catch (e) {
+            console.log(e.stack);
+            console.log(e.message);
+            return Promise.resolve(new Error('user does not exist'));
+        }
+        if (guildMember) {
+            const isTradeRestricted = guildMember.roles.cache.find(role => role.id === '749016638187372565');
+            if (isTradeRestricted) {
+                pendingResponse.redirect('https://dyno.gg/form/ea4bf8e5');
+                return true
+            }
+        }
+        pendingResponse.send('You have successfully linked your PoE account to TFT.\n Welcome to TFT! Please read ⁠<#667298412596559904>, ⁠<#669127045678104587> and <#805209481049800765>. \nAlso check out our blacklist tool which helps protect you from blacklisted users in game. You can find more info here https://discord.com/channels/645607528297922560/667298412596559904/869892738714333204 - enjoy your time trading on TFT!\n You can now close this tab.');
         return true;
     }, (rejectProfileReason) => {
         console.log(`rejectProfileReason: ${JSON.stringify(rejectProfileReason)}`)
