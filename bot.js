@@ -251,6 +251,7 @@ if (process.env.RUN_TYPE !== 'server') {
   });
 
   client.on('messageReactionAdd', async (_reaction, user) => {
+    console.log('ok so we got a reaction');
     const reaction = _reaction.partial ? await _reaction.fetch() : _reaction;
     console.log(`reaction message id: ${reaction.message.channel.id}-${reaction.message.channel.name} -- user: ${user.id}-${user.username}`);
     if (reaction.message.channel.id == REMOVE_TR_CHANNEL_ID || reaction.message.channel.id == CANT_LINK_CHANNEL_ID) {
