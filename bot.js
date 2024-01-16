@@ -6,7 +6,7 @@ let client;
 
 if (process.env.RUN_TYPE !== 'server') {
   client = new Discord.Client({
-    partials: ['CHANNEL', 'REACTION'],
+    partials: ['CHANNEL'],
     presence: {
       activityName: 'DM me to verify',
       activityType: 'PLAYING'
@@ -14,6 +14,7 @@ if (process.env.RUN_TYPE !== 'server') {
     intents: [
       Discord.Intents.FLAGS.GUILDS,
       Discord.Intents.FLAGS.GUILD_PRESENCES,
+      Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
       Discord.Intents.FLAGS.GUILD_MEMBERS,
       Discord.Intents.FLAGS.MESSAGE_CONTENT,
       Discord.Intents.FLAGS.GUILD_MESSAGES,
