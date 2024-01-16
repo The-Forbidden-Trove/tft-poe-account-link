@@ -6,7 +6,7 @@ let client;
 
 if (process.env.RUN_TYPE !== 'server') {
   client = new Discord.Client({
-    partials: ['CHANNEL', 'REACTION'],
+    partials: ['CHANNEL', 'REACTION', 'MESSAGE'],
     presence: {
       activityName: 'DM me to verify',
       activityType: 'PLAYING'
@@ -253,16 +253,17 @@ if (process.env.RUN_TYPE !== 'server') {
   client.on('messageReactionAdd', async (_reaction, user) => {
     console.log('ok so we got a reaction');
     const reaction = _reaction.partial ? await _reaction.fetch() : _reaction;
-    console.log(`reaction message id: ${reaction.message.channel.id}-${reaction.message.channel.name} -- user: ${user.id}-${user.username}`);
-    if (reaction.message.channel.id == REMOVE_TR_CHANNEL_ID || reaction.message.channel.id == CANT_LINK_CHANNEL_ID) {
+    const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
+    console.log(`reaction message id: ${message.channel.id}-${message.channel.name} -- user: ${user.id}-${user.username}`);
+    if (message.channel.id == REMOVE_TR_CHANNEL_ID || message.channel.id == CANT_LINK_CHANNEL_ID) {
       console.log('1 reaction');
-      const hasThread = reaction.message.hasThread();
+      const hasThread = message.hasThread();
       if (!hasThread) {
         console.log('ohno');
         return;
       }
       console.log('2 reaction');
-      await reaction.message.thread.send(`User <@${user.id}> is taking this case.`);
+      await message.thread.send(`User <@${user.id}> is taking this case.`);
     }
   });
 
