@@ -6,7 +6,7 @@ let client;
 
 if (process.env.RUN_TYPE !== 'server') {
   client = new Discord.Client({
-    partials: ['CHANNEL'],
+    partials: ['CHANNEL', 'REACTION'],
     presence: {
       activityName: 'DM me to verify',
       activityType: 'PLAYING'
