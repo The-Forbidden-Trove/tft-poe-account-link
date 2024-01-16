@@ -251,17 +251,13 @@ if (process.env.RUN_TYPE !== 'server') {
   });
 
   client.on('messageReactionAdd', async (_reaction, user) => {
-    console.log('ok so we got a reaction');
     const reaction = _reaction.partial ? await _reaction.fetch() : _reaction;
     const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
-    console.log(`reaction message id: ${message.channel.id}-${message.channel.name} -- user: ${user.id}-${user.username}`);
     if (message.channel.id == REMOVE_TR_CHANNEL_ID || message.channel.id == CANT_LINK_CHANNEL_ID) {
-      console.log('1 reaction');
       if (!message.hasThread) {
-        console.log('ohno');
+        console.log(`It didnt have a thread, weird, message was ${message.url} user was ${user.id}- ${user.username}`);
         return;
       }
-      console.log('2 reaction');
       await message.thread.send(`User <@${user.id}> is taking this case.`);
     }
   });
