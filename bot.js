@@ -135,7 +135,7 @@ if (process.env.RUN_TYPE !== 'server') {
     if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
       const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
       if (isLinked) {
-        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, please fill out this form https://dyno.gg/form/ea4bf8e5 and the team will be in touch.');
+        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, please fill out this form https://dyno.gg/form/ea4bf8e5 and the team will be in touch. Please be **patient** as there are many applications that come in every single day, and they all need a final vetting by a moderator before approval. This may take a number of days, or in peak times, sometimes a week or more.');
         await assignTftVerifiedRole(message.author.id);
         return;
       }
