@@ -81,7 +81,8 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
             }
         }
         if (!success) {
-            pendingResponse.redirect('https://dyno.gg/form/e6fe79a8');
+            pendingResponse.send(`There was an error linking. Please re-try linking, else if this doesn't help, open a modmail by sending a DM (direct message) to <@825395083184439316> (the Contact Mods Here bot user top right of TFT).`);
+            return false;
         }
         return success;
     }
@@ -109,6 +110,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         const profileRespJson = await profileResp.json();
         // console.log(`profileRespJson: ${JSON.stringify(profileRespJson)}`)
         if (profileRespJson['error'] !== undefined) {
+            pendingResponse.send(`There was an error linking. Please re-try linking, else if this doesn't help, open a modmail by sending a DM (direct message) to <@825395083184439316> (the Contact Mods Here bot user top right of TFT).`);
             return false;
         }
         const poeAccName = profileRespJson.name;
@@ -118,7 +120,7 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
         //console.log(poeCharName);
 
         if (poeAccRealm != "pc") {
-            pendingResponse.redirect('https://dyno.gg/form/e6fe79a8');
+            pendingResponse.send('You are not playing in the normal PC realm, and will not be able to link automatically. Please open a modmail by sending a DM (direct message) to <@825395083184439316> (the Contact Mods Here bot user top right of TFT).');
             return false;
         }
 
