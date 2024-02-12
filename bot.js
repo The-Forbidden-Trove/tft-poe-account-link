@@ -104,6 +104,9 @@ if (process.env.RUN_TYPE !== 'server') {
       } else {
         await thread.send(chars);
       }
+      if (!thread.parentId == REMOVE_TR_CHANNEL_ID) {
+        return;
+      }
       await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
       await thread.send(`If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
       await thread.send(`If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
@@ -123,7 +126,7 @@ if (process.env.RUN_TYPE !== 'server') {
      * @param {Discord.ThreadChannel} thread 
      */
     async (thread) => {
-      if (thread.parentId == REMOVE_TR_CHANNEL_ID) {
+      if (thread.parentId == REMOVE_TR_CHANNEL_ID || thread.parentId === '772961816379785226') {
         await postVerificationStuff(thread);
       }
       return;
@@ -244,7 +247,7 @@ if (process.env.RUN_TYPE !== 'server') {
         await message.channel.delete();
         await startingThreadMsg.delete();
       }
-      if (lowerCaseContent === '#resendinfo' && message.channel.parentId == REMOVE_TR_CHANNEL_ID) {
+      if (lowerCaseContent === '#resendinfo' && message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId === '772961816379785226') {
         await postVerificationStuff(message.channel);
       }
     }
