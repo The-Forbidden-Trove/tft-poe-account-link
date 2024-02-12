@@ -247,7 +247,7 @@ if (process.env.RUN_TYPE !== 'server') {
         await message.channel.delete();
         await startingThreadMsg.delete();
       }
-      if (lowerCaseContent === '#resendinfo' && message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId === '772961816379785226') {
+      if ((message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId === '772961816379785226') && lowerCaseContent === '#resendinfo') {
         await postVerificationStuff(message.channel);
       }
     }
