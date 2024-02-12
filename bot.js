@@ -104,7 +104,7 @@ if (process.env.RUN_TYPE !== 'server') {
       } else {
         await thread.send(chars);
       }
-      if (!thread.parentId == REMOVE_TR_CHANNEL_ID) {
+      if (thread.parentId !== REMOVE_TR_CHANNEL_ID) {
         return;
       }
       await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
