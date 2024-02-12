@@ -240,7 +240,7 @@ if (process.env.RUN_TYPE !== 'server') {
         }
       }
     }
-    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId == CANT_LINK_CHANNEL_ID) {
+    if (message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId == CANT_LINK_CHANNEL_ID || message.channel.parentId === '772961816379785226') {
       const lowerCaseContent = message.content.toLowerCase().trim();
       if (lowerCaseContent === '#closetr') {
         const startingThreadMsg = await message.channel.fetchStarterMessage();
