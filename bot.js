@@ -94,7 +94,7 @@ if (process.env.RUN_TYPE !== 'server') {
       const isChallengesPrivate = challengesHtml.includes('has been set to private');
       const challengesCompleted = isChallengesPrivate ? 'Challenges are private' : challengesHtml.replace(/[\s\S]*Challenges completed/, 'Challenges completed').replace(/of 40[\s\S]*/, 'of 40');
       //Challenges completed
-      const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]\n\n`
+      const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is \`${poeAccount}\` [${poeUuid}]\n\n`
         + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}\n\n`
         + `${challengesCompleted}\n`;
       await thread.send(verificationInfo);
