@@ -120,19 +120,6 @@ if (process.env.RUN_TYPE !== 'server') {
     return;
   }
 
-  client.on('threadCreate',
-    /**
-     * 
-     * @param {Discord.ThreadChannel} thread 
-     */
-    async (thread) => {
-      if (thread.parentId == REMOVE_TR_CHANNEL_ID || thread.parentId === '772961816379785226') {
-        await postVerificationStuff(thread);
-      }
-      return;
-    }
-  );
-
   client.on('messageCreate', async (message) => {
     // is private message
     if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
