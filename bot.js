@@ -256,12 +256,20 @@ if (process.env.RUN_TYPE !== 'server') {
   client.on('messageReactionAdd', async (_reaction, user) => {
     const reaction = _reaction.partial ? await _reaction.fetch() : _reaction;
     const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
-    if (message.channel.id == REMOVE_TR_CHANNEL_ID || message.channel.id == CANT_LINK_CHANNEL_ID) {
+    if (message.channel.id === REMOVE_TR_CHANNEL_ID) {
+      const title = message?.embeds?.[0]?.title
+      const newThread = await message.startThread({
+        name: `${title} - Remove Trade Restriction`,
+        autoArchiveDuration: "MAX",
+      });
+      await newThread.send(`User <@${user.id}> is taking this case.`);
+      await postVerificationStuff(newThread);
+    }
+    if (message.channel.id == CANT_LINK_CHANNEL_ID) {
       if (!message.hasThread) {
         console.log(`It didnt have a thread, weird, message was ${message.url} user was ${user.id}- ${user.username}`);
         return;
       }
-      await message.thread.send(`User <@${user.id}> is taking this case.`);
     }
   });
 
