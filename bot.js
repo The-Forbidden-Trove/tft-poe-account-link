@@ -57,6 +57,10 @@ if (process.env.RUN_TYPE !== 'server') {
     console.log(`Activity set to ${JSON.stringify(client.user.presence.activities)}`)
   });
 
+  client.on('rateLimit', (rateLimitInfo) => {
+    console.log(`Rate limited: ${JSON.stringify(rateLimitInfo)}`);
+  });
+
   const postVerificationStuff = async (thread) => {
     const threadMsg = await thread.fetchStarterMessage();
     const footer = threadMsg?.embeds?.[0]?.footer?.text;
