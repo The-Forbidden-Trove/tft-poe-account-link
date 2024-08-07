@@ -237,6 +237,7 @@ if (process.env.RUN_TYPE !== 'server') {
         const startingThreadMsg = await message.channel.fetchStarterMessage();
         await message.channel.delete();
         await startingThreadMsg.delete();
+        return;
       }
       if ((message.channel.parentId == REMOVE_TR_CHANNEL_ID || message.channel.parentId === '772961816379785226') && lowerCaseContent === '#resendinfo') {
         await postVerificationStuff(message.channel);
