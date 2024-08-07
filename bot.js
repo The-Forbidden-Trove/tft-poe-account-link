@@ -107,15 +107,15 @@ if (process.env.RUN_TYPE !== 'server') {
       if (thread.parentId !== REMOVE_TR_CHANNEL_ID) {
         return;
       }
-      await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n`)
-      await thread.send(`If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
-      await thread.send(`If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
-      await thread.send(`If you want to reject the user due to a correct form, but they are too new, please use the command\n \`?trunmetreq ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n`);
-      await thread.send(`If you need the user to send more info or it's a more advanced case, please use the \`trmm\` command. This also takes an id, but you should also write a note along with it (it wont be sent to the user). E.g. \`?trmm ${userId} old account, maybe purchased\`. If you want to investigate it or have context, please put something like \`?trmm ${userId} ping me\` so that when a mod looks up the id and sees your note, they know to ping you about it. \nThis command will then send a prewritten DM to the user telling them to open a modmail, and will Trade Restrict them. Please then use the command \`#closetr\` to remove this thread.`);
+      await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n
+      If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n
+      If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n
+      If you want to reject the user due to a correct form, but they are too new, please use the command\n \`?trunmetreq ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n
+      If you need the user to send more info or it's a more advanced case, please use the \`trmm\` command. This also takes an id, but you should also write a note along with it (it wont be sent to the user). E.g. \`?trmm ${userId} old account, maybe purchased\`. If you want to investigate it or have context, please put something like \`?trmm ${userId} ping me\` so that when a mod looks up the id and sees your note, they know to ping you about it. \nThis command will then send a prewritten DM to the user telling them to open a modmail, and will Trade Restrict them. Please then use the command \`#closetr\` to remove this thread.`);
       return
     } else {
-      await thread.send(`No POE account found for discord id ${userId} - user is not linked!`);
-      await thread.send(`To reject the user due to not being linked yet, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
+      await thread.send(`No POE account found for discord id ${userId} - user is not linked!\n\n
+      To reject the user due to not being linked yet, please use the command \`?trreject ${userId}\` to send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n`);
     }
     return;
   }
