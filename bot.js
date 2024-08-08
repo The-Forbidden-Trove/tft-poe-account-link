@@ -249,6 +249,9 @@ if (process.env.RUN_TYPE !== 'server') {
     const reaction = _reaction.partial ? await _reaction.fetch() : _reaction;
     const message = reaction.message.partial ? await reaction.message.fetch() : reaction.message;
     if (message.channel.id === REMOVE_TR_CHANNEL_ID) {
+      if (message.hasThread) {
+        return;
+      }
       const title = message?.embeds?.[0]?.title
       const newThread = await message.startThread({
         name: `${title} - Remove Trade Restriction`,
