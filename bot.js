@@ -112,7 +112,7 @@ if (process.env.RUN_TYPE !== 'server') {
         return;
       }
       await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n
-      If the user doesn't need verifying and isn't restricted and can use TFT fine, just send \n`?noaction ${userId}`\n\n
+      If the user doesn't need verifying and isn't restricted and can use TFT fine, just send \n\`?noaction ${userId}\`\n\n
       If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n
       If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n
       If you want to reject the user due to a correct form, but they are too new, please use the command\n \`?trunmetreq ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n
