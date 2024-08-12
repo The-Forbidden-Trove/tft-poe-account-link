@@ -86,21 +86,10 @@ if (process.env.RUN_TYPE !== 'server') {
       });
       const chars = charsJson !== '' ? charsJson.map((char) => char.name) : 'No chars found - maybe private?';
 
-      const challengesResp = await nfetch(`https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Host': 'www.pathofexile.com',
-          'User-Agent': 'TftPoeLinkerCheck / 2.0'
-        }
-      });
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
-      const challengesHtml = await challengesResp.text();
-      const isChallengesPrivate = challengesHtml.includes('has been set to private');
-      const challengesCompleted = isChallengesPrivate ? 'Challenges are private' : challengesHtml.replace(/[\s\S]*Challenges completed/, 'Challenges completed').replace(/of 40[\s\S]*/, 'of 40');
       //Challenges completed
       const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is \`${poeAccount}\` [${poeUuid}]\n\n`
         + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}\n\n`
-        + `${challengesCompleted}\n`;
+        + `Please check https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges for their challenges\n`;
       await thread.send(verificationInfo);
       await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
       if (charsJson !== '') {
