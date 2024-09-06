@@ -250,7 +250,7 @@ if (process.env.RUN_TYPE !== 'server') {
       await newThread.send(`User <@${user.id}> is taking this case.`);
       await postVerificationStuff(newThread);
     }
-    if (message.channel.id === '1218579325670920192') {
+    if (message.channel.id === '1218579325670920192' || message.channel.id === '1218578682889900112') {
       if (reaction.emoji.name == '❌' || reaction.emoji.name == '✅') {
         await message.delete()
       }
