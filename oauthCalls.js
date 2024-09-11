@@ -81,7 +81,7 @@ const callProfileApiWithRetryBackoff = async (tokenResp, pendingResponse, discor
             }
         }
         if (!success) {
-            pendingResponse.send(`There was an error linking. Please re-try linking, else if this doesn't help, open a modmail by sending a DM (direct message) to <@825395083184439316> (the Contact Mods Here bot user top right of TFT).`);
+            pendingResponse.send(`There was an error linking. Please re-try linking, else if this doesn't help, open a modmail by sending a DM (direct message) to <@825395083184439316> (the Contact Mods Here bot user top right of TFT) and please provide your POE account name so we can help.`);
             return false;
         }
         return success;
