@@ -184,6 +184,38 @@ if (process.env.RUN_TYPE !== 'server') {
           return;
         }
 
+        if (lowerCaseContent.includes('advcdl')) {
+          if (!message.member.roles.cache.find(r => r.id === '688053164037243179')) {
+            await message.channel.send('You do not have permission to run this command.')
+            return;
+          }
+          const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
+          const poeUuid = await getPoeUuidByDiscordId(userId);
+          if (poeAccount !== false && poeAccount > "") {
+            await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
+            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}`);
+            const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
+              headers: {
+                'Content-Type': 'application/json',
+                'Host': 'www.pathofexile.com',
+                'User-Agent': 'TftPoeLinkerCheck / 2.0'
+              }
+            });
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
+            const charsJson = await charsResp.json().catch((e) => {
+              console.log(e);
+              return '';
+            });
+            const chars = charsJson !== '' ? charsJson.map((char) => char.name) : 'No chars found - maybe private?';
+            if (charsJson !== '') {
+              await message.channel.send(`\`\`\`${chars.join(', ')}\`\`\`\n`);
+            } else {
+              await message.channel.send(chars);
+            }
+          }
+          return;
+        }
+
         if (message.content.includes(process.env.chkDiscCmd) || message.content.includes('dldata')) {
           const data = await getAllDataFromDB();
           console.log(data);
