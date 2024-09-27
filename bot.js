@@ -189,6 +189,7 @@ if (process.env.RUN_TYPE !== 'server') {
             await message.channel.send('You do not have permission to run this command.')
             return;
           }
+          const userId = splitContent[1]
           const poeAccount = await getPoeTftStateLinkByDiscordId(userId);
           const poeUuid = await getPoeUuidByDiscordId(userId);
           if (poeAccount !== false && poeAccount > "") {
