@@ -137,7 +137,7 @@ if (process.env.RUN_TYPE !== 'server') {
         const poeUuid = await getPoeUuidByDiscordId(userId);
         if (poeAccount !== false && poeAccount > "") {
           await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
-          await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}`)
+          await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#','-'))}?discordid=${userId}&uuid=${poeUuid}`)
           return
         }
         await message.channel.send(`No POE account found for discord id ${userId}`);
@@ -176,7 +176,7 @@ if (process.env.RUN_TYPE !== 'server') {
           const poeUuid = await getPoeUuidByDiscordId(userId);
           if (poeAccount !== false && poeAccount > "") {
             await message.channel.send(`The POE account linked to discord id ${userId} (<@${userId}>) is ${poeAccount} [${poeUuid}]`);
-            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}`);
+            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#','-'))}?discordid=${userId}&uuid=${poeUuid}`);
             const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
               headers: {
                 'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ if (process.env.RUN_TYPE !== 'server') {
           const poeUuid = await getPoeUuidByDiscordId(splitContent[1]);
           if (poeAccount !== false && poeAccount > "") {
             await message.channel.send(`The POE account linked to discord id ${splitContent[1]} (<@${splitContent[1]}>) is ${poeAccount} [${poeUuid}]`);
-            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${splitContent[1]}&uuid=${poeUuid}`)
+            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#','-'))}?discordid=${splitContent[1]}&uuid=${poeUuid}`)
             return
           }
           await message.channel.send(`No POE account found for discord id ${splitContent[1]}`);
@@ -225,7 +225,7 @@ if (process.env.RUN_TYPE !== 'server') {
           const poeUuid = await getPoeUuidByDiscordId(discordId);
           if (discordId !== false && discordId > "") {
             await message.channel.send(`The discord id linked to the POE account ${splitContent[1]} is ${discordId} (<@${discordId}>)`);
-            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(splitContent[1])}`)
+            await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(splitContent[1].replace('#', '-'))}`)
             if (poeUuid !== false) {
               await message.channel.send(`UUID:\n ${poeUuid}`);
             }
@@ -316,7 +316,7 @@ const notifyModmailLink = async (discordUserId) => {
   const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
   const infoEmbed = {
     "title": `ℹ️ User Linked ℹ️`,
-    "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
+    "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#', '-'))}?discordid=${discordUserId}`,
     "color": 0xff448e
   }
   try {

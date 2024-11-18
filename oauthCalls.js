@@ -50,7 +50,7 @@ const notifyModmailLink = async (discordUserId) => {
     const poeAccount = await getPoeTftStateLinkByDiscordId(discordUserId);
     const infoEmbed = {
         "title": `ℹ️ User Linked ℹ️`,
-        "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${discordUserId}`,
+        "description": `The user in this modmail has linked a PoE account.\nTheir pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#', '-'))}?discordid=${discordUserId}`,
         "color": 0xff448e
     }
     try {
