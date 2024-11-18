@@ -6,6 +6,7 @@ const { addBlacklistedUserAttempt, addBannedPoeUserAttempt, getPoeTftStateLinkBy
 const { checkBannedAccount } = require('./checker');
 
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
+const LINKED_TFT_POE_ROLE_ID_NEW = '1307963535074131968';
 const TFT_SERVER_ID = '645607528297922560';
 const MODMAIL_CATEGORY = '834148931213852743';
 
@@ -36,6 +37,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
     }
     if (guildMember) {
         await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
+        await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID_NEW); 
         await notifyModmailLink(discordUserId);
     }
 }
@@ -114,15 +116,11 @@ const callProfileApi = async (accessToken, pendingResponse, discordId, blacklist
             return false;
         }
         const poeAccName = profileRespJson.name;
-        const poeAccRealm = profileRespJson.realm;
         const poeAccUUID = profileRespJson.uuid;
         //const poeCharName = await callCharactersApi(accessToken);
         //console.log(poeCharName);
 
-        if (poeAccRealm != "pc") {
-            pendingResponse.send('You are not playing in the normal PC realm, and will not be able to link automatically. Please open a modmail by sending a DM (direct message) to <@825395083184439316> (the Contact Mods Here bot user top right of TFT).');
-            return false;
-        }
+
 
         if (blacklist.indexOf(poeAccName.toLowerCase()) > -1) {
             await addBlacklistedUserAttempt(discordId, poeAccName, poeAccUUID);

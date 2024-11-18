@@ -44,6 +44,7 @@ const CANT_LINK_CHANNEL_ID = process.env.cantLinkChannelId?.trim();
 const MODMAIL_CATEGORY = '834148931213852743';
 const MOD_ALERT_CHANNEL_ID = process.env.modAlertChannelId;
 const LINKED_TFT_POE_ROLE_ID = '848751148478758914';
+const LINKED_TFT_POE_ROLE_ID_NEW = '1307963535074131968';
 const TFT_SERVER_ID = '645607528297922560';
 
 if (process.env.NODE_ENV === 'dev' && process.env.testEnvProp === undefined) {
@@ -72,31 +73,12 @@ if (process.env.RUN_TYPE !== 'server') {
     const poeUuid = await getPoeUuidByDiscordId(userId);
 
     if (poeAccount !== false && poeAccount > "") {
-      const charsResp = await nfetch(`https://www.pathofexile.com/character-window/get-characters?accountName=${encodeURIComponent(poeAccount)}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Host': 'www.pathofexile.com',
-          'User-Agent': 'TftPoeLinkerCheck / 2.0'
-        }
-      });
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // wait 1 second to not get ratelimited
-      const charsJson = await charsResp.json().catch((e) => {
-        console.log(e);
-        return '';
-      });
-      const chars = charsJson !== '' ? charsJson.map((char) => char.name) : 'No chars found - maybe private?';
-
       //Challenges completed
       const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is \`${poeAccount}\` [${poeUuid}]\n\n`
         + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}\n\n`
         + `Please check https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges for their challenges\n`;
       await thread.send(verificationInfo);
-      await thread.send(`Please execute the following command in <#${BOT_CONTROL_CHANNEL_ID}> to check the blacklist:`);
-      if (charsJson !== '') {
-        await thread.send(`\`\`\`!blacklist check ${chars.join(', ')}\`\`\`\n`);
-      } else {
-        await thread.send(chars);
-      }
+      await thread.send(`Please, **don't forget to use the blacklist check from the yoink in their profile**`);
       if (thread.parentId !== REMOVE_TR_CHANNEL_ID) {
         return;
       }
@@ -322,6 +304,7 @@ const assignTftVerifiedRole = async (discordUserId) => {
   }
   if (guildMember) {
     await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID);
+    await guildMember.roles.add(LINKED_TFT_POE_ROLE_ID_NEW);
     await notifyModmailLink(discordUserId);
   }
 }
