@@ -75,8 +75,8 @@ if (process.env.RUN_TYPE !== 'server') {
     if (poeAccount !== false && poeAccount > "") {
       //Challenges completed
       const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is \`${poeAccount}\` [${poeUuid}]\n\n`
-        + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount)}?discordid=${userId}&uuid=${poeUuid}\n\n`
-        + `Please check https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount)}/challenges for their challenges\n`;
+        + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#', '-'))}?discordid=${userId}&uuid=${poeUuid}\n\n`
+        + `Please check https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount.replace('#', '-'))}/challenges for their challenges\n`;
       await thread.send(verificationInfo);
       await thread.send(`Please, **don't forget to use the blacklist check from the yoink in their profile**`);
       if (thread.parentId !== REMOVE_TR_CHANNEL_ID) {
@@ -96,14 +96,22 @@ if (process.env.RUN_TYPE !== 'server') {
     return;
   }
 
+
   client.on('messageCreate', async (message) => {
     // is private message
     if (message.author.dmChannel && message.channel.id == message.author.dmChannel.id) {
       const isLinked = await getPoeTftStateLinkByDiscordId(message.author.id);
       if (isLinked) {
-        await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, please fill out this form https://dyno.gg/form/ea4bf8e5 and the team will be in touch. Please be **patient** as there are many applications that come in every single day, and they all need a final vetting by a moderator before approval. This may take a number of days, or in peak times, sometimes a week or more.');
-        await assignTftVerifiedRole(message.author.id);
-        return;
+        if (isLinked.match(/#/)) {
+          await message.author.dmChannel.send('You have already linked your POE account with the TFT-POE account linker! If you can\'t see the trade channels, please fill out this form https://dyno.gg/form/ea4bf8e5 and the team will be in touch. Please be **patient** as there are many applications that come in every single day, and they all need a final vetting by a moderator before approval. This may take a number of days, or in peak times, sometimes a week or more.');
+          await assignTftVerifiedRole(message.author.id);
+          return;  
+        }
+        else {
+          const botControlChannel = await client.channels.fetch(BOT_CONTROL_CHANNEL_ID, true);
+          await botControlChannel.send(`User ${message.author.id} with link ${isLinked} has been unlinked so they can link their account with discriminator.`);
+          unlinkDiscordID(message.author.id);
+        }
       }
       const generatedState = v4();
       await createStateDiscordIdLink(generatedState, message.author.id);
