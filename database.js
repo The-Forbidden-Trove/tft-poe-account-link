@@ -92,7 +92,7 @@ const getAllDataFromDB = async () => {
   const [rows] = await conn.execute(`SELECT * FROM ${LINK_TABLE}`);
   var data = "";
   for (let i = 0; i < rows.length; i++) {
-    data += `${rows[i]['poe_account_name']}\t${rows[i]['discord_id']}\n`
+    data += `${rows[i]['poe_account_name']}\t${rows[i]['discord_id']}\t${rows[i]['uuid']}\n`
   }
   fs.writeFileSync('linkeddata.txt', data);
   return data;
