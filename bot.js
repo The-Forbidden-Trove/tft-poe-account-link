@@ -208,7 +208,7 @@ if (process.env.RUN_TYPE !== 'server') {
         }
 
         if (message.content.includes(process.env.chkDiscCmd) || message.content.includes('dldata')) {
-          const data = await getAllDataFromDB();
+          await getAllDataFromDB();
           await message.channel.send("Data ready for download.", { files: ["./linkeddata.txt"] });
         }
 
