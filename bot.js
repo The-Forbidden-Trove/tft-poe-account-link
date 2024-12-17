@@ -236,7 +236,7 @@ if (process.env.RUN_TYPE !== 'server') {
           let discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1]);
           let poeUuid = await getPoeUuidByDiscordId(discordId);
           let triedWithoutDiscriminator = false;
-          if (discordId === false || discordId > "") {
+          if (discordId === false || discordId <= "") {
             discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1].replace(/#.*/, ''));
             poeUuid = await getPoeUuidByDiscordId(discordId);
             triedWithoutDiscriminator = true;
