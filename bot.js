@@ -233,11 +233,20 @@ if (process.env.RUN_TYPE !== 'server') {
           return;
         }
         if (lowerCaseContent.includes(process.env.chkpoecmd) || lowerCaseContent.includes('cpl')) {
-          const discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1]);
-          const poeUuid = await getPoeUuidByDiscordId(discordId);
+          let discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1]);
+          let poeUuid = await getPoeUuidByDiscordId(discordId);
+          let triedWithoutDiscriminator = false;
+          if (discordId === false || discordId > "") {
+            discordId = await getPoeTftStateLinkByPoeAccount(splitContent[1].replace(/#.*/, ''));
+            poeUuid = await getPoeUuidByDiscordId(discordId);
+            triedWithoutDiscriminator = true;
+          }
           if (discordId !== false && discordId > "") {
             await message.channel.send(`The discord id linked to the POE account ${splitContent[1]} is ${discordId} (<@${discordId}>)`);
             await message.channel.send(`Their pathofexile account url is: https://www.pathofexile.com/account/view-profile/${encodeURI(splitContent[1].replace('#', '-'))}`)
+            if (triedWithoutDiscriminator) {
+              await message.channel.send(`This lookup was done on the account name **without the discriminator** as a link to one with the given discriminator could not be found. Please double check discriminator and IGNs!`);
+            }
             if (poeUuid !== false) {
               await message.channel.send(`UUID:\n ${poeUuid}`);
             }
