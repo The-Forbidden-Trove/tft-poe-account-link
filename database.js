@@ -13,6 +13,7 @@ const pool = mysql2.createPool({
   waitForConnections: true,
   connectionLimit: 20,
   queueLimit: 10,
+  charset: 'utf8mb4',
 });
 
 const getConnection = async () => {
