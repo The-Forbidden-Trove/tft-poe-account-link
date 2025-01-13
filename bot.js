@@ -91,8 +91,8 @@ if (process.env.RUN_TYPE !== 'server') {
       \`?trmm ${userId}\`\n
       If you want to investigate it or have context, please put something like \`?trmm ${userId} ping me\` so that when a mod looks up the id and sees your note, they know to ping you about it. \n
       This command will then send a prewritten DM to the user telling them to open a modmail, and will Trade Restrict them. Please then use the command \n\`#closetr\`\n to remove this thread.\n\n
-      If you want to verify a user _just_ for POE2, use \`?poe2\` which will remove TR, adds poe1 locked role and time traveller role.\n\n
-      If you want to force a user to link/fill out the form, use \`?link\` which will send them a DM instructing them to do so, and add TR to them.`);
+      If you want to verify a user _just_ for POE2, use \`?poe2 ${userId}\` which will remove TR, adds poe1 locked role and time traveller role.\n\n
+      If you want to force a user to link/fill out the form, use \`?link ${userId}\` which will send them a DM instructing them to do so, and add TR to them.`);
       return
     } else {
       await thread.send(`No POE account found for discord id ${userId} - user is not linked!\n\n
