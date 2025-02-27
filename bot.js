@@ -74,25 +74,39 @@ if (process.env.RUN_TYPE !== 'server') {
 
     if (poeAccount !== false && poeAccount > "") {
       //Challenges completed
-      const verificationInfo = `The POE account linked to discord id ${userId} (<@${userId}>) is \`${poeAccount}\` [${poeUuid}]\n\n`
-        + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#', '-'))}?discordid=${userId}&uuid=${poeUuid}\n\n`
-        + `Please check https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount.replace('#', '-'))}/challenges for their challenges\n`;
+      const verificationInfo = `POE account:  \`${poeAccount}\` [${poeUuid}] (Discord: ${userId} - <@${userId}>)\n`
+        + `POE url: https://www.pathofexile.com/account/view-profile/${encodeURI(poeAccount.replace('#', '-'))}?discordid=${userId}&uuid=${poeUuid}\n`
+        + `Please check https://www.pathofexile.com/account/view-profile/${encodeURIComponent(poeAccount.replace('#', '-'))}/challenges for their challenges\n\n`;
       await thread.send(verificationInfo);
       await thread.send(`Please, **don't forget to use the blacklist check from the yoink in their profile**`);
       if (thread.parentId !== REMOVE_TR_CHANNEL_ID) {
         return;
       }
-      await thread.send(`Then please yoink the info from the account page as usual and paste it into bot-control so that Tina can put it into the DB.\n\n
-      If the user doesn't need verifying and isn't restricted and can use TFT fine, just send \n\`?noaction ${userId}\`\n\n
-      If everything looks fine, please use the command\n \`?trapprove ${userId}\` \nto approve the user, remove the trade restrict role, send an approval DM to them via Dyno, then use the command \`#closetr\` to remove this thread.\n\n
-      If you want to reject the user due to a badly filled out form, please use the command\n \`?trreject ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n
-      If you want to reject the user due to a correct form, but they are too new, please use the command\n \`?trunmetreq ${userId}\` \nto send a rejection DM to them via dyno, then use the command \`#closetr\` to remove this thread.\n\n
-      If you need the user to send more info or it's a more advanced case, please use the \`trmm\` command. This also takes an id, but you should also write a note along with it (it wont be sent to the user). E.g.\n
+      await thread.send(`Paste the info from the yoink into bot-control so that Tina can put it into the DB. Then, please use one of these commands in <#716528634092847154>:\n\n
+      🟩 No action needed:\n
+      \`?noaction ${userId}\`\n
+      -# User has no restrictions, doesn't need verifying\n\n
+
+      ✅  Approve:\n
+      \`?trapprove ${userId}\`\n
+      approves the user for TFT\n\n
+      
+      ❌ Reject (bad form):\n
+      \`?trreject ${userId}\`\n
+      private accounts, random answers\n\n
+      
+      🕒 Reject (too new):\n
+      \`?trunmetreq ${userId}\`\n
+      their account is younger than 30 days/their character is below lvl 85\n\n
+      
+      📩 Advanced case/more info needed:\n
       \`?trmm ${userId}\`\n
-      If you want to investigate it or have context, please put something like \`?trmm ${userId} ping me\` so that when a mod looks up the id and sees your note, they know to ping you about it. \n
-      This command will then send a prewritten DM to the user telling them to open a modmail, and will Trade Restrict them. Please then use the command \n\`#closetr\`\n to remove this thread.\n\n
-      If you want to verify a user _just_ for POE2, use \`?poe2 ${userId}\` which will remove TR, adds poe1 locked role and time traveller role.\n\n
-      If you want to force a user to link/fill out the form, use \`?link ${userId}\` which will send them a DM instructing them to do so, and add TR to them.`);
+      previous poe/discord accounts, discord search turned up something, etc\n\n
+
+      If you want to verify a user _just_ for POE2, use \`?poe2 ${userId}\` which will remove TR, adds poe1 locked role and time traveller role.\n
+      If you want to force a user to link/fill out the form, use \`?link ${userId}\` which will send them a DM instructing them to do so, and add TR to them.\n\n
+      
+      After this close the thread with \`#closetr\``);
       return
     } else {
       await thread.send(`No POE account found for discord id ${userId} - user is not linked!\n\n
